@@ -9,36 +9,63 @@ datasource db {
 
 model Patient {
   id                           String   @id @default(cuid())
-  firstName                    String
-  lastName                     String
+
+  // Required basic info
+  firstName                    String?
+  lastName                     String?
+  dateOfBirth                  DateTime?
+  gender                       String?
+  phoneNumber                  String?
   email                        String   @unique
-  phoneNumber                  String
-  dateOfBirth                  DateTime
 
-  streetAddress                String
-  city                         String
-  state                        String
-  zipCode                      String
+  // Optional personal info
 
-  bloodType                    String?
-  height                       String?
-  weight                       String?
-  allergies                    String?
+  // Optional address
+  streetAddress                String?
+  city                         String?
+  state                        String?
+  zipCode                      String?
+  country                      String?
 
-  currentMedications           String?
-  medicationDosages            String?
-  currentConditions            String?
-  pastSurgeries                String?
-  surgeryDates                 String?
-  familyMedicalHistory         String?
-
+  // Optional emergency contact
   emergencyContactName         String?
   emergencyContactPhone        String?
   emergencyContactRelationship String?
 
-  createdAt                    DateTime @default(now())
-}
+  // Optional medical info
+  bloodType                    String?
+  allergies                    String?
+  currentMedications           String?
+  medicalConditions            String?
+  pastSurgeries                String?
 
+  // Optional insurance
+  insuranceProvider            String?
+  policyNumber                 String?
+  groupNumber                  String?
+
+  // Optional appointment
+  preferredDate                String?
+  preferredTime                String?
+  reasonForVisit               String?
+
+  // Optional travel
+  passportNumber               String?
+  nationality                  String?
+  arrivalDate                  String?
+  departureDate                String?
+  hotelPreference              String?
+
+  // Optional payment
+  cardholderName               String?
+  cardNumber                   String?
+  expirationDate               String?
+  cvv                          String?
+  billingAddress               String?
+
+  createdAt                    DateTime @default(now())
+  updatedAt                    DateTime @updatedAt
+}
 model Provider {
   id        String   @id @default(cuid())
   name      String

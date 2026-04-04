@@ -1,4 +1,4 @@
-export default function PatientLists({patients}) {    
+export default function PatientLists({patients }: {patients: any[]}) {    
      return(
     <div>
         {patients.map((patient: any) => (

@@ -1,21 +1,25 @@
-import PatientList from "@/components/PatientList";  
-import Createpatient from "@/components/CreatePatient";
+"use client";
+
+import PatientList from "@/components/PatientList";
+import AddData from "@/components/AddData";
 import prisma from "@/lib/prisma";
+import { patientInfoFields } from "@/components/patientFields";
+import Login from "@/components/Login";
+import { use, useState } from "react";
 
-export default async function Page(){
-    const patients = await prisma .patient.findMany();
-    const patientCount = await prisma.patient.count();
+export default function Page() {
+    const [loggedInEmail, setLoggedInEmail] = useState("");
 
-    return(
+    return (
 
-   
 
-    <div>
-        <Createpatient />
-        <PatientList patients = {patients} />
-        <h1>Total patients: {patientCount}</h1>
-    </div>
-    
-)
+
+        <div>
+            <Login fields={patientInfoFields.loginFields} onLogin={setLoggedInEmail} />
+            <AddData fields={patientInfoFields.personalInfoFields} email={loggedInEmail} />
+            <p>logged in as: {loggedInEmail}</p>
+        </div>
+
+    )
 
 }
