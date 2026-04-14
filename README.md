@@ -1,36 +1,39 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Medical Tourism Platform
 
-## Getting Started
+## Description
+The Medical Tourism Platform is a full-stack web application built to help manage patients and medical tourism services. The system allows users to create patient profiles, store medical and travel information, and manage healthcare-related workflows in one place.
 
-First, run the development server:
+This project is designed to simplify coordination between patients, clinics, and travel services by providing a centralized platform for managing important data and processes.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Technologies Used
+- Next.js
+- React
+- Prisma ORM
+- SQLite
+- Node.js
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Current Progress
+So far, the project includes:
+- A patient creation system with form validation
+- API routes for retrieving and creating patient data
+- Frontend and backend integration
+- Prisma database connection
+- UI components for patient management
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Prototype / Code Examples
+Important files in the project include:
+- API route: `/app/api/user/route.ts`
+- Form component: `/components/AddData.tsx`
+- Database schema: `/prisma/schema.prisma`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Future Plans
+Planned improvements for the project include:
+- Adding a package builder for clinics, hotels, and flights
+- Adding authentication and user accounts
+- Improving the user interface and user experience
+- Deploying the application to AWS
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## How to Run
+1. Clone the repository:
+   ```bash
+   git clone <your-repository-url>
