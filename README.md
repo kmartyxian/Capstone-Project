@@ -1,5 +1,11 @@
 # Medical Tourism Platform
 
+# Medical Tourism Platform
+
+**Name:** Jeremy Wanguhu  
+**Course:** CIDS 484  
+**Semester:** Spring 2026
+
 ## Description
 The Medical Tourism Platform is a full-stack web application built to help manage patients and medical tourism services. The system allows users to create patient profiles, store medical and travel information, and manage healthcare-related workflows in one place.
 
