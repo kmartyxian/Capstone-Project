@@ -1,15 +1,32 @@
 # Medical Tourism Platform
 
-# Medical Tourism Platform
-
-**Name:** Jeremy Wanguhu  
-**Course:** CIDS 484  
-**Semester:** Spring 2026
-
 ## Description
-The Medical Tourism Platform is a full-stack web application built to help manage patients and medical tourism services. The system allows users to create patient profiles, store medical and travel information, and manage healthcare-related workflows in one place.
+This project is a full-stack web application designed to support the medical tourism industry. It allows agencies to manage patient information, medical data, and travel logistics in one centralized system.
 
-This project is designed to simplify coordination between patients, clinics, and travel services by providing a centralized platform for managing important data and processes.
+The goal is to create a scalable and user-friendly platform that improves organization and workflow for both agencies and patients.
+
+---
+
+## Project Outline
+
+### Goals
+- Build a system to manage medical tourism patients
+- Store medical, personal, and travel information
+- Create a centralized workflow platform for agencies
+- Develop a scalable full-stack application
+
+### Core Features
+- Patient profile creation and management
+- Form handling and validation
+- API routes for backend communication
+- Database integration for persistent data storage
+
+### System Architecture
+- **Frontend:** Next.js + React
+- **Backend:** Next.js API routes
+- **Database:** SQLite using Prisma ORM
+
+---
 
 ## Technologies Used
 - Next.js
@@ -18,28 +35,52 @@ This project is designed to simplify coordination between patients, clinics, and
 - SQLite
 - Node.js
 
+---
+
 ## Current Progress
-So far, the project includes:
-- A patient creation system with form validation
-- API routes for retrieving and creating patient data
-- Frontend and backend integration
-- Prisma database connection
-- UI components for patient management
+- Built patient creation system
+- Implemented form handling and validation
+- Created API routes (GET, POST)
+- Connected frontend to backend
+- Integrated Prisma database
+- Built UI components for patient data management
+
+This represents the foundational structure of the application and demonstrates working full-stack functionality.
+
+---
 
 ## Prototype / Code Examples
-Important files in the project include:
-- API route: `/app/api/user/route.ts`
-- Form component: `/components/AddData.tsx`
-- Database schema: `/prisma/schema.prisma`
+
+- `/app/api/user/route.ts`  
+  Handles API requests for creating and retrieving patient data.
+
+- `/components/AddData.tsx`  
+  React component that renders the patient form and submits data to the backend.
+
+- `/prisma/schema.prisma`  
+  Defines the database schema and structure for storing patient information.
+
+---
 
 ## Future Plans
-Planned improvements for the project include:
-- Adding a package builder for clinics, hotels, and flights
-- Adding authentication and user accounts
-- Improving the user interface and user experience
-- Deploying the application to AWS
+- Add authentication system (login/signup)
+- Build package builder (clinics, hotels, flights)
+- Improve UI/UX design
+- Expand database structure
+- Deploy application to a cloud service (AWS)
+
+---
+
+## Demo Video
+https://youtu.be/sw-mpkqt8vU
+
+---
 
 ## How to Run
-1. Clone the repository:
-   ```bash
-   git clone <your-repository-url>
+1. Clone the repository
+2. Install dependencies:
+   npm install
+3. Run the development server:
+   npm run dev
+4. Open in browser:
+   http://localhost:3000
