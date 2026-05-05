@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 type Patient = {
   id: string;
   firstName?: string | null;
@@ -57,9 +59,14 @@ export default function PatientTable({
             patients.map((patient) => (
               <tr key={patient.id} className="border-t border-slate-200 last:border-b">
                 <td className="px-4 py-4 text-slate-900">
-                  {patient.firstName || patient.lastName
-                    ? `${patient.firstName ?? ""} ${patient.lastName ?? ""}`.trim()
-                    : "Unnamed patient"}
+                  <Link
+                    href={`/patients/${patient.id}`}
+                    className="text-blue-600 hover:underline"
+                  >
+                    {patient.firstName || patient.lastName
+                      ? `${patient.firstName ?? ""} ${patient.lastName ?? ""}`.trim()
+                      : "Unnamed patient"}
+                  </Link>
                 </td>
                 <td className="px-4 py-4 text-slate-900">{patient.email}</td>
                 <td className="px-4 py-4 text-slate-900">{patient.status ?? "Active"}</td>

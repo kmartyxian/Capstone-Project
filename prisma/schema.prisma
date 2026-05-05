@@ -67,7 +67,19 @@ model Patient {
 
   createdAt                    DateTime @default(now())
   updatedAt                    DateTime @updatedAt
+
+  notesList                    Note[]
 }
+
+model Note {
+  id        String   @id @default(cuid())
+  patientId String
+  content   String
+  createdAt DateTime @default(now())
+
+  patient   Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+}
+
 model Provider {
   id        String   @id @default(cuid())
   name      String

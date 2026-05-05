@@ -5,6 +5,7 @@
 **Semester:** Spring 2026
 
 ## Description
+
 The Medical Tourism Platform is a full-stack web application built to help manage patients and medical tourism services. The system allows users to create patient profiles, store medical and travel information, and manage healthcare-related workflows in one place.
 
 This project is designed to simplify coordination between patients, clinics, and travel services by providing a centralized platform for managing important data and processes.
@@ -12,17 +13,20 @@ This project is designed to simplify coordination between patients, clinics, and
 ## Milestone 2 - Alpha Release
 
 ### Current Status
+
 The project now includes a fully functional **Patient Management Module (Module 2)** with a working user interface for managing patients.
 
 ### Features Implemented & Working
 
 #### Module 1 - Patient Data Entry
+
 - ✅ Patient creation form with validation
 - ✅ API routes for patient data management
 - ✅ Prisma ORM integration with SQLite database
 - ✅ Form validation for all patient fields
 
 #### Module 2 - Patient Management Dashboard (Alpha)
+
 - ✅ **View All Patients** - Display all patients in a clean table format
 - ✅ **Create Patient** - Add new patients with modal form (Name, Email, Notes, Status)
 - ✅ **Edit Patient** - Update patient information with pre-filled modal forms
@@ -61,6 +65,7 @@ lib/
 ### How to Access the Features
 
 1. **Start the development server:**
+
    ```bash
    npm run dev
    ```
@@ -76,6 +81,7 @@ lib/
    - **Delete patient:** Click `Delete` button, confirm in prompt
 
 ### Technologies Used
+
 - Next.js (16.1.6)
 - React (19.2.3)
 - Prisma ORM (6.19.2)
@@ -87,20 +93,25 @@ lib/
 ### API Endpoints
 
 #### GET `/api/user`
+
 Returns all patients in the database.
 
 #### POST `/api/user`
+
 Creates a new patient with provided data fields.
 
 #### PATCH `/api/user`
+
 Updates an existing patient by email or ID.
 
 #### DELETE `/api/user`
+
 Deletes a patient by email or ID.
 
 ### Database Schema
 
 The `Patient` model includes:
+
 - Basic info: firstName, lastName, email, dateOfBirth, gender, phoneNumber
 - Address: streetAddress, city, state, zipCode, country
 - Medical: bloodType, allergies, currentMedications, medicalConditions, pastSurgeries
@@ -118,6 +129,7 @@ The `Patient` model includes:
 - **module-2** - Patient management dashboard with full CRUD operations (current alpha)
 
 ### Future Plans
+
 - Adding authentication and user accounts
 - Implementing clinic and hotel service management
 - Building package builder for travel and medical services
@@ -129,22 +141,26 @@ The `Patient` model includes:
 ## How to Run
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/kmartyxian/Capstone-Project.git
    cd Capstone-Project
    ```
 
 2. Install dependencies:
+
    ```bash
    npm install
    ```
 
 3. Set up the database:
+
    ```bash
    npx prisma db push
    ```
 
 4. Start the development server:
+
    ```bash
    npm run dev
    ```
@@ -154,6 +170,7 @@ The `Patient` model includes:
 ## Video Demonstration
 
 A ~5 minute video demonstrating the project features and code walkthrough has been recorded and should be uploaded to the GitHub repository. The video covers:
+
 - Project overview and purpose
 - Features implemented in Module 2
 - Live demonstration of patient management operations
@@ -161,4 +178,5 @@ A ~5 minute video demonstrating the project features and code walkthrough has be
 - Code walkthrough of key components
 
 ## Repository
+
 GitHub: https://github.com/kmartyxian/Capstone-Project
