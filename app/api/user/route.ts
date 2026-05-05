@@ -46,6 +46,8 @@ export async function POST(request: Request) {
   expirationDate,
   cvv,
   billingAddress,
+  notes,
+  status,
   
 
        
@@ -168,10 +170,9 @@ else {
         cardNumber,
         expirationDate,
         cvv,
-        billingAddress
-
-
-
+        billingAddress,
+        notes,
+        status,
     }
     });
     return new Response(JSON.stringify(createpatient));
@@ -186,24 +187,43 @@ else {
 
 export async function PATCH(request: Request) {
     const body = await request.json();
-    const{email, ...updateData} = body;
+    const { id, currentEmail, ...updateData } = body;
+    const where = id ? { id } : currentEmail ? { email: currentEmail } : null;
+
+    if (!where) {
+      return new Response("Patient identifier is required.", { status: 400 });
+    }
+
     if (typeof updateData.dateOfBirth === "string") {
-  const dob = updateData.dateOfBirth.trim();
+      const dob = updateData.dateOfBirth.trim();
 
-  if (dob === "") {
-    // if blank, either remove it from update or clear it
-    delete updateData.dateOfBirth; // keeps existing DB value
-    // or: updateData.dateOfBirth = null; // clears DB value
-  } else {
-    updateData.dateOfBirth = new Date(`${dob}T00:00:00.000Z`);
-  }
+      if (dob === "") {
+        delete updateData.dateOfBirth;
+      } else {
+        updateData.dateOfBirth = new Date(`${dob}T00:00:00.000Z`);
+      }
+    }
 
-}
     const update = await prisma.patient.update({
-        where: { email: email },
+        where,
         data: updateData,
     });
     return new Response(JSON.stringify(update));
-
-
 }
+
+export async function DELETE(request: Request) {
+    const body = await request.json();
+    const { id, email } = body;
+    const where = id ? { id } : email ? { email } : null;
+
+    if (!where) {
+      return new Response("Patient identifier is required.", { status: 400 });
+    }
+
+    const deleted = await prisma.patient.delete({
+        where,
+    });
+
+    return new Response(JSON.stringify(deleted));
+}
+
