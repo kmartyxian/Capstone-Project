@@ -9,7 +9,7 @@ export async function GET(request: Request) {
   }
 
   const provider = await prisma.provider.findFirst({
-    where: { name: email },
+    where: { OR: [{ name: email }, { username: email }] },
   });
 
   return Response.json({ valid: !!provider });

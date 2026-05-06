@@ -17,6 +17,7 @@ model Patient {
   gender                       String?
   phoneNumber                  String?
   email                        String   @unique
+  username                     String?  @unique
 
   // Optional personal info
 
@@ -83,6 +84,7 @@ model Note {
 model Provider {
   id        String   @id @default(cuid())
   name      String
+  username  String?  @unique
   location  String
   createdAt DateTime @default(now())
 }

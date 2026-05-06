@@ -8,8 +8,8 @@ export async function GET(request: Request) {
     return Response.json({ valid: false }, { status: 400 });
   }
 
-  const patient = await prisma.patient.findUnique({
-    where: { email },
+  const patient = await prisma.patient.findFirst({
+    where: { OR: [{ email }, { username: email }] },
   });
 
   return Response.json({

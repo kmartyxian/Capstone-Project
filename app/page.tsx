@@ -48,6 +48,7 @@ export default function Page() {
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                     <div className="rounded bg-white p-6 shadow-sm">
                         <h2 className="mb-4 text-lg font-medium text-slate-900">Provider Login</h2>
+                        <p className="mb-2 text-sm text-slate-500">Login with email or username</p>
                         <Login
                             fields={patientInfoFields.loginFields}
                             onLogin={(email) => {
@@ -60,6 +61,7 @@ export default function Page() {
 
                     <div className="rounded bg-white p-6 shadow-sm">
                         <h2 className="mb-4 text-lg font-medium text-slate-900">Patient Login</h2>
+                        <p className="mb-2 text-sm text-slate-500">Login with email or username</p>
                         <Login
                             fields={patientInfoFields.loginFields}
                             onLogin={(email) => {
@@ -73,10 +75,10 @@ export default function Page() {
 
                 <div className="text-center">
                     <Link
-                        href="/patients"
+                        href="/register"
                         className="text-sm text-slate-600 hover:text-slate-900"
                     >
-                        Test: Open Patients (no auth)
+                        Don't have an account? Register here
                     </Link>
                 </div>
             </div>
