@@ -15,15 +15,19 @@ export async function POST(request: NextRequest) {
       return Response.json({ error: "Invalid role" }, { status: 400 });
     }
 
-    // Check uniqueness across both tables
-    const existingPatient = await prisma.patient.findFirst({
-      where: { OR: [{ email }, { username }] },
-    });
-    const existingProvider = await prisma.provider.findFirst({
-      where: { OR: [{ name: email }, { username }] },
-    });
+    // Check uniqueness within the respective table
+    let existingRecord = null;
+    if (role === "provider") {
+      existingRecord = await prisma.provider.findFirst({
+        where: { OR: [{ name: email }, { username }] },
+      });
+    } else {
+      existingRecord = await prisma.patient.findFirst({
+        where: { OR: [{ email }, { username }] },
+      });
+    }
 
-    if (existingPatient || existingProvider) {
+    if (existingRecord) {
       return Response.json({ error: "Email or username already exists" }, { status: 400 });
     }
 
