@@ -8,7 +8,30 @@
 
 The Medical Tourism Platform is a full-stack web application built to help manage patients and medical tourism services. The system allows users to create patient profiles, store medical and travel information, and manage healthcare-related workflows in one place.
 
-This project is designed to simplify coordination between patients, clinics, and travel services by providing a centralized platform for managing important data and processes.
+The goal is to create a scalable and user-friendly platform that improves organization and workflow for both agencies and patients.
+
+---
+
+## Project Outline
+
+### Goals
+- Build a system to manage medical tourism patients
+- Store medical, personal, and travel information
+- Create a centralized workflow platform for agencies
+- Develop a scalable full-stack application
+
+### Core Features
+- Patient profile creation and management
+- Form handling and validation
+- API routes for backend communication
+- Database integration for persistent data storage
+
+### System Architecture
+- **Frontend:** Next.js + React
+- **Backend:** Next.js API routes
+- **Database:** SQLite using Prisma ORM
+
+---
 
 ## Milestone 2 - Alpha Release
 
@@ -90,6 +113,7 @@ lib/
 - TypeScript
 - Tailwind CSS
 
+<<<<<<< HEAD
 ### API Endpoints
 
 #### GET `/api/user`
@@ -180,3 +204,54 @@ A ~5 minute video demonstrating the project features and code walkthrough has be
 ## Repository
 
 GitHub: https://github.com/kmartyxian/Capstone-Project
+=======
+---
+
+## Current Progress
+- Built patient creation system
+- Implemented form handling and validation
+- Created API routes (GET, POST)
+- Connected frontend to backend
+- Integrated Prisma database
+- Built UI components for patient data management
+
+This represents the foundational structure of the application and demonstrates working full-stack functionality.
+
+---
+
+## Prototype / Code Examples
+
+- `/app/api/user/route.ts`  
+  Handles API requests for creating and retrieving patient data.
+
+- `/components/AddData.tsx`  
+  React component that renders the patient form and submits data to the backend.
+
+- `/prisma/schema.prisma`  
+  Defines the database schema and structure for storing patient information.
+
+---
+
+## Future Plans
+- Add authentication system (login/signup)
+- Build package builder (clinics, hotels, flights)
+- Improve UI/UX design
+- Expand database structure
+- Deploy application to a cloud service (AWS)
+
+---
+
+## Demo Video
+https://youtu.be/sw-mpkqt8vU
+
+---
+
+## How to Run
+1. Clone the repository
+2. Install dependencies:
+   npm install
+3. Run the development server:
+   npm run dev
+4. Open in browser:
+   http://localhost:3000
+>>>>>>> 7cbb430ac65bb420561a00c3c095adbcb1c9a39b
