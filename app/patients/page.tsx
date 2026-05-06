@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import AddPatientModal from "@/components/AddPatientModal";
 import EditPatientModal from "@/components/EditPatientModal";
 import PatientTable from "@/components/PatientTable";
@@ -15,10 +16,27 @@ type Patient = {
 };
 
 export default function Page() {
+  const router = useRouter();
   const [patients, setPatients] = useState<Patient[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAdd, setShowAdd] = useState(false);
   const [editPatient, setEditPatient] = useState<Patient | null>(null);
+
+  useEffect(() => {
+    const session = localStorage.getItem("session");
+    if (!session) {
+      router.push("/");
+      return;
+    }
+
+    const { role } = JSON.parse(session);
+    if (role !== "provider") {
+      router.push("/");
+      return;
+    }
+
+    loadPatients();
+  }, [router]);
 
   async function loadPatients() {
     setLoading(true);
@@ -27,10 +45,6 @@ export default function Page() {
     setPatients(Array.isArray(data) ? data : []);
     setLoading(false);
   }
-
-  useEffect(() => {
-    loadPatients();
-  }, []);
 
   return (
     <div className="min-h-screen bg-slate-50 p-6">
