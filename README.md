@@ -213,7 +213,7 @@ Invoke-WebRequest -Uri http://localhost:3000/api/user -UseBasicParsing
 
 ## Video Walkthrough
 
-Video link: PASTE_VIDEO_LINK_HERE
+Video link: https://youtu.be/sw-mpkqt8vU
 
 ## Future Plans
 
