@@ -1,0 +1,96 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url = env("DATABASE_URL")
+}
+
+model Patient {
+  id                           String   @id @default(cuid())
+
+  // Required basic info
+  firstName                    String?
+  lastName                     String?
+  dateOfBirth                  DateTime?
+  gender                       String?
+  phoneNumber                  String?
+  email                        String   @unique
+
+  // Optional personal info
+
+  // Optional address
+  streetAddress                String?
+  city                         String?
+  state                        String?
+  zipCode                      String?
+  country                      String?
+
+  // Optional emergency contact
+  emergencyContactName         String?
+  emergencyContactPhone        String?
+  emergencyContactRelationship String?
+
+  // Optional medical info
+  bloodType                    String?
+  allergies                    String?
+  currentMedications           String?
+  medicalConditions            String?
+  pastSurgeries                String?
+
+  // Optional insurance
+  insuranceProvider            String?
+  policyNumber                 String?
+  groupNumber                  String?
+
+  // Optional appointment
+  preferredDate                String?
+  preferredTime                String?
+  reasonForVisit               String?
+
+  // Optional travel
+  passportNumber               String?
+  nationality                  String?
+  arrivalDate                  String?
+  departureDate                String?
+  hotelPreference              String?
+
+  // Optional payment
+  cardholderName               String?
+  cardNumber                   String?
+  expirationDate               String?
+  cvv                          String?
+  billingAddress               String?
+  notes                        String?
+  status                       String?
+
+  createdAt                    DateTime @default(now())
+  updatedAt                    DateTime @updatedAt
+
+  notesList                    Note[]
+}
+
+model Note {
+  id        String   @id @default(cuid())
+  patientId String
+  content   String
+  createdAt DateTime @default(now())
+
+  patient   Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+}
+
+model Provider {
+  id        String   @id @default(cuid())
+  name      String
+  location  String
+  createdAt DateTime @default(now())
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  location  String
+  createdAt DateTime @default(now())
+}
+
