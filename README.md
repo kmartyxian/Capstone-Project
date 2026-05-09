@@ -16,17 +16,6 @@ Milestone 2 builds on the first patient intake prototype by adding a patient man
 
 Milestone 2 is the alpha release of the patient management module. The project now has a visible patient table, modal forms for patient creation and editing, delete actions, and API endpoints connected to Prisma and SQLite.
 
-## Assignment Requirements Covered
-
-- Create an overview and outline of the project and push all documentation to the GitHub repository by the due date.
-- Create a prototype or code examples that demonstrate the technologies used for the project and push all code to the GitHub repository.
-- Update the README file in the GitHub repository.
-- Add a description of the project.
-- Add a description of the current progress.
-- Make sure the README file is organized and easy to read.
-- Create a roughly 5 minute video that gives an overview of the project and walks through the outline and code at a high level.
-- The video can be created or uploaded with Kaltura, YouTube, or another similar service. UWRF Kaltura help: https://kb.wisconsin.edu/dle/95100
-
 ## Current Progress
 
 Completed in this milestone:
@@ -299,17 +288,9 @@ Invoke-WebRequest -Uri http://localhost:3000/api/user `
   -Body '{"email":"test.patient@example.com"}'
 ```
 
-## Video Walkthrough Plan
+## Video Walkthrough
 
-The 5 minute video should cover:
-
-1. Project purpose and medical tourism use case.
-2. Milestone 2 progress compared to Milestone 1.
-3. How the app is structured.
-4. How Prisma and SQLite are connected.
-5. Live demo of adding, editing, and deleting a patient.
-6. Quick code walkthrough of the dashboard, modals, API route, and Prisma schema.
-7. Future work planned for later milestones.
+Video link: PASTE_VIDEO_LINK_HERE
 
 ## Future Plans
 
