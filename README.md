@@ -290,7 +290,7 @@ Invoke-WebRequest -Uri http://localhost:3000/api/user `
 
 ## Video Walkthrough
 
-Video link: PASTE_VIDEO_LINK_HERE
+Video link: https://youtu.be/4Uwi3NalKRQ
 
 ## Future Plans
 
