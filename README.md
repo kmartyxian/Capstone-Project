@@ -16,17 +16,6 @@ This project uses a Next.js frontend, API routes for backend operations, Prisma 
 
 Milestone 1 creates the project outline and first working prototype. The application includes a patient login/data-entry flow, a Prisma schema, API routes, and form components that demonstrate how patient information will be collected and stored.
 
-## Assignment Requirements Covered
-
-- Create an overview and outline of the project and push all documentation to the GitHub repository by the due date.
-- Create a prototype or code examples that demonstrate the technologies used for the project and push all code to the GitHub repository.
-- Update the README file in the GitHub repository.
-- Add a description of the project.
-- Add a description of the current progress.
-- Make sure the README file is organized and easy to read.
-- Create a roughly 5 minute video that gives an overview of the project and walks through the outline and code at a high level.
-- The video can be created or uploaded with Kaltura, YouTube, or another similar service. UWRF Kaltura help: https://kb.wisconsin.edu/dle/95100
-
 ## Current Progress
 
 Completed in this milestone:
@@ -222,17 +211,9 @@ Then check all patients:
 Invoke-WebRequest -Uri http://localhost:3000/api/user -UseBasicParsing
 ```
 
-## Video Walkthrough Plan
+## Video Walkthrough
 
-The 5 minute video should cover:
-
-1. Project overview and problem being solved.
-2. Milestone 1 goals.
-3. Repository structure.
-4. The Prisma schema and SQLite database setup.
-5. The patient data entry form.
-6. The API route that writes patient data.
-7. A quick demo of running the app locally.
+Video link: PASTE_VIDEO_LINK_HERE
 
 ## Future Plans
 
