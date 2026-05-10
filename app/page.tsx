@@ -1,17 +1,18 @@
 "use client";
 
-import { patientInfoFields } from "@/components/patientFields";
+import { InfoFields } from "@/components/Fields";
 import Login from "@/components/Login";
+import Register from "@/components/Register";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function Page() {
     const router = useRouter();
-    const [providerEmail, setProviderEmail] = useState("");
-    const [patientEmail, setPatientEmail] = useState("");
     const [providerError, setProviderError] = useState("");
     const [patientError, setPatientError] = useState("");
+    const [providerRegister, setProviderRegister] = useState(false);
+    const [patientRegister, setPatientRegister] = useState(false);
 
     async function handleProviderLogin(email: string) {
         const response = await fetch(`/api/auth/provider?email=${encodeURIComponent(email)}`);
@@ -47,26 +48,62 @@ export default function Page() {
 
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                     <div className="rounded bg-white p-6 shadow-sm">
-                        <h2 className="mb-4 text-lg font-medium text-slate-900">Provider Login</h2>
-                        <Login
-                            fields={patientInfoFields.loginFields}
-                            onLogin={(email) => {
-                                setProviderEmail(email);
-                                handleProviderLogin(email);
-                            }}
-                        />
+                        <h2 className="mb-4 text-lg font-medium text-slate-900">
+                            Provider {providerRegister ? "Register" : "Login"}
+                        </h2>
+                        {providerRegister ? (
+                            <Register
+                                role="provider"
+                                onRegistered={(email) => {
+                                    localStorage.setItem("session", JSON.stringify({ role: "provider", email }));
+                                    setProviderRegister(!providerRegister);
+                                }}
+                            />
+                        ) : (
+                            <Login
+                                fields={InfoFields.loginFields}
+                                onLogin={(email) => {
+                                    handleProviderLogin(email);
+                                }}
+                            />
+                        )}
+                        <button
+                            type="button"
+                            onClick={() => setProviderRegister(!providerRegister)}
+                            className="mt-3 text-sm text-blue-600 hover:text-blue-800"
+                        >
+                            {providerRegister ? "Back to login" : "Register"}
+                        </button>
                         {providerError && <p className="mt-2 text-sm text-rose-600">{providerError}</p>}
                     </div>
 
                     <div className="rounded bg-white p-6 shadow-sm">
-                        <h2 className="mb-4 text-lg font-medium text-slate-900">Patient Login</h2>
-                        <Login
-                            fields={patientInfoFields.loginFields}
-                            onLogin={(email) => {
-                                setPatientEmail(email);
-                                handlePatientLogin(email);
-                            }}
-                        />
+                        <h2 className="mb-4 text-lg font-medium text-slate-900">
+                            Patient {patientRegister ? "Register" : "Login"}
+                        </h2>
+                        {patientRegister ? (
+                            <Register
+                                role="patient"
+                                onRegistered={(email, patientId) => {
+                                    localStorage.setItem("session", JSON.stringify({ role: "patient", email, patientId }));
+                                    setPatientRegister(!patientRegister);
+                                }}
+                            />
+                        ) : (
+                            <Login
+                                fields={InfoFields.loginFields}
+                                onLogin={(email) => {
+                                    handlePatientLogin(email);
+                                }}
+                            />
+                        )}
+                        <button
+                            type="button"
+                            onClick={() => setPatientRegister(!patientRegister)}
+                            className="mt-3 text-sm text-blue-600 hover:text-blue-800"
+                        >
+                            {patientRegister ? "Back to login" : "Register"}
+                        </button>
                         {patientError && <p className="mt-2 text-sm text-rose-600">{patientError}</p>}
                     </div>
                 </div>

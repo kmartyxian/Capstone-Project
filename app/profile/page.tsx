@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { patientInfoFields } from "@/components/patientFields";
+import Link from "next/link";
+import { InfoFields } from "@/components/Fields";
 
 type Patient = {
   id: string;
@@ -95,22 +96,27 @@ export default function ProfilePage() {
   if (!patient) return <p>Patient not found.</p>;
 
   const sections = [
-    { title: "Personal Info", fields: patientInfoFields.personalInfoFields },
-    { title: "Address", fields: patientInfoFields.addressFields },
-    { title: "Emergency Contact", fields: patientInfoFields.emergencyContactFields },
-    { title: "Medical Info", fields: patientInfoFields.medicalInfoFields },
-    { title: "Insurance", fields: patientInfoFields.insuranceFields },
-    { title: "Appointment", fields: patientInfoFields.appointmentFields },
-    { title: "Travel Info", fields: patientInfoFields.travelInfoFields },
-    { title: "Payment", fields: patientInfoFields.paymentFields },
-    { title: "Login", fields: patientInfoFields.loginFields },
+    { title: "Personal Info", fields: InfoFields.personalInfoFields },
+    { title: "Address", fields: InfoFields.addressFields },
+    { title: "Emergency Contact", fields: InfoFields.emergencyContactFields },
+    { title: "Medical Info", fields: InfoFields.medicalInfoFields },
+    { title: "Insurance", fields: InfoFields.insuranceFields },
+    { title: "Appointment", fields: InfoFields.appointmentFields },
+    { title: "Travel Info", fields: InfoFields.travelInfoFields },
+    { title: "Payment", fields: InfoFields.paymentFields },
+    { title: "Login", fields: InfoFields.loginFields },
   ];
 
   return (
     <div className="min-h-screen bg-slate-50 p-6">
       <div className="mx-auto max-w-4xl space-y-6">
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-semibold text-slate-900">My Profile</h1>
+          <div>
+            <Link href="/" className="mb-2 inline-block text-sm text-blue-600 hover:underline">
+              Back to Login
+            </Link>
+            <h1 className="text-2xl font-semibold text-slate-900">My Profile</h1>
+          </div>
           <button
             onClick={handleSave}
             className="rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"

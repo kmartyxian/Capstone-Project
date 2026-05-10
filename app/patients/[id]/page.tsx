@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { patientInfoFields } from "@/components/patientFields";
+import { InfoFields } from "@/components/Fields";
 
 type Patient = {
   id: string;
@@ -85,15 +85,15 @@ export default function PatientDetailPage() {
   if (!patient) return <p>Patient not found.</p>;
 
   const sections = [
-    { title: "Personal Info", fields: patientInfoFields.personalInfoFields },
-    { title: "Address", fields: patientInfoFields.addressFields },
-    { title: "Emergency Contact", fields: patientInfoFields.emergencyContactFields },
-    { title: "Medical Info", fields: patientInfoFields.medicalInfoFields },
-    { title: "Insurance", fields: patientInfoFields.insuranceFields },
-    { title: "Appointment", fields: patientInfoFields.appointmentFields },
-    { title: "Travel Info", fields: patientInfoFields.travelInfoFields },
-    { title: "Payment", fields: patientInfoFields.paymentFields },
-    { title: "Login", fields: patientInfoFields.loginFields },
+    { title: "Personal Info", fields: InfoFields.personalInfoFields },
+    { title: "Address", fields: InfoFields.addressFields },
+    { title: "Emergency Contact", fields: InfoFields.emergencyContactFields },
+    { title: "Medical Info", fields: InfoFields.medicalInfoFields },
+    { title: "Insurance", fields: InfoFields.insuranceFields },
+    { title: "Appointment", fields: InfoFields.appointmentFields },
+    { title: "Travel Info", fields: InfoFields.travelInfoFields },
+    { title: "Payment", fields: InfoFields.paymentFields },
+    { title: "Login", fields: InfoFields.loginFields },
   ];
 
   return (
@@ -101,7 +101,7 @@ export default function PatientDetailPage() {
       <div className="mx-auto max-w-4xl space-y-6">
         <div className="flex items-center justify-between">
           <Link href="/patients" className="text-blue-600 hover:underline">
-            ← Back to Patients
+            Back to Patients
           </Link>
           <button
             onClick={handleSave}

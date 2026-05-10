@@ -1,182 +1,359 @@
-# Medical Tourism Platform
+# Medical Tourism Platform - Milestone 3
 
 **Name:** Jeremy Wanguhu  
 **Course:** CIDS 484  
-**Semester:** Spring 2026
+**Semester:** Spring 2026  
+**Repository:** https://github.com/kmartyxian/Capstone-Project  
+**Branch:** `milestone-3`
 
-## Description
+## Project Description
 
-The Medical Tourism Platform is a full-stack web application built to help manage patients and medical tourism services. The system allows users to create patient profiles, store medical and travel information, and manage healthcare-related workflows in one place.
+The Medical Tourism Platform is a full-stack web application for managing the patient side and provider side of a medical tourism workflow. It stores patient intake information, medical history, emergency contacts, insurance details, appointment preferences, travel details, notes, and patient status.
 
-This project is designed to simplify coordination between patients, clinics, and travel services by providing a centralized platform for managing important data and processes.
+Milestone 3 expands the app beyond the patient management dashboard by adding basic role-based flows for patients and providers, patient profile editing, and notes connected to patient records.
 
-## Milestone 2 - Alpha Release
+## Milestone 3 Overview
 
-### Current Status
+Milestone 3 demonstrates a more complete workflow:
 
-The project now includes a fully functional **Patient Management Module (Module 2)** with a working user interface for managing patients.
+- Providers can log in and view the patient management dashboard.
+- Patients can log in and view their own profile.
+- Patient profile data can be edited.
+- Notes can be added to a patient profile.
+- The app continues to use Prisma and SQLite for database integration.
 
-### Features Implemented & Working
+## Current Progress
 
-#### Module 1 - Patient Data Entry
+Completed in this milestone:
 
-- ✅ Patient creation form with validation
-- ✅ API routes for patient data management
-- ✅ Prisma ORM integration with SQLite database
-- ✅ Form validation for all patient fields
+- Patient data entry from Milestone 1.
+- Patient management dashboard from Milestone 2.
+- Provider login validation.
+- Patient login validation.
+- Patient profile page at `/profile`.
+- Patient detail page structure at `/patients/[id]`.
+- Notes API connected to patient records.
+- Prisma schema updated with a `Note` model.
+- Continued SQLite database integration.
 
-#### Module 2 - Patient Management Dashboard (Alpha)
+Not finished yet:
 
-- ✅ **View All Patients** - Display all patients in a clean table format
-- ✅ **Create Patient** - Add new patients with modal form (Name, Email, Notes, Status)
-- ✅ **Edit Patient** - Update patient information with pre-filled modal forms
-- ✅ **Delete Patient** - Remove patients with confirmation
-- ✅ **Real-time UI Updates** - Immediate table refresh after any operation
-- ✅ **Responsive Table Layout** - Patient list with Name, Email, Status columns
-- ✅ **Error Handling** - Validation messages for form inputs
-- ✅ **Home Button** - Quick access link from homepage to patient dashboard
+- Secure production authentication.
+- Password support.
+- Full provider account management.
+- Deployment.
+- Advanced reporting and analytics.
+- Travel package builder for clinics, hotels, and flights.
 
-### Project Structure
+## Technologies Used
 
-```
-app/
-  ├── page.tsx                    # Home page with link to patients
-  ├── patients/
-  │   └── page.tsx               # Patient management dashboard
-  ├── api/user/
-  │   └── route.ts               # API endpoints (GET, POST, PATCH, DELETE)
-  └── globals.css
-
-components/
-  ├── PatientTable.tsx           # Patient list table component
-  ├── AddPatientModal.tsx        # Add patient form modal
-  ├── EditPatientModal.tsx       # Edit patient form modal
-  ├── AddData.tsx                # Data entry form
-  └── Login.tsx                  # Login component
-
-prisma/
-  ├── schema.prisma              # Database schema with Patient model
-  └── migrations/                # Database migration history
-
-lib/
-  └── prisma.ts                  # Prisma client setup
-```
-
-### How to Access the Features
-
-1. **Start the development server:**
-
-   ```bash
-   npm run dev
-   ```
-
-2. **Navigate to the homepage:**
-   - Open `http://localhost:3000`
-   - Click the **"Open Patients"** button
-
-3. **Patient Management Dashboard:**
-   - **View patients:** All patients load automatically in a table
-   - **Add patient:** Click `+ Add Patient` button, fill form, click Save
-   - **Edit patient:** Click `Edit` button in patient row, update fields, click Save
-   - **Delete patient:** Click `Delete` button, confirm in prompt
-
-### Technologies Used
-
-- Next.js (16.1.6)
-- React (19.2.3)
-- Prisma ORM (6.19.2)
-- SQLite
-- Node.js
+- Next.js 16
+- React 19
 - TypeScript
+- Prisma ORM
+- SQLite
 - Tailwind CSS
+- Node.js and npm
 
-### API Endpoints
+## Important Project Files
 
-#### GET `/api/user`
+- `app/page.tsx` - Login screen with provider and patient login sections.
+- `app/patients/page.tsx` - Provider-facing patient dashboard.
+- `app/patients/[id]/page.tsx` - Individual patient route.
+- `app/profile/page.tsx` - Patient-facing profile page.
+- `app/api/user/route.ts` - Patient CRUD API.
+- `app/api/auth/provider/route.ts` - Provider login validation API.
+- `app/api/auth/patient/route.ts` - Patient login validation API.
+- `app/api/notes/route.ts` - Notes API.
+- `components/PatientTable.tsx` - Patient table component.
+- `components/AddPatientModal.tsx` - Add patient modal.
+- `components/EditPatientModal.tsx` - Edit patient modal.
+- `components/Login.tsx` - Reusable email login component.
+- `components/Fields.ts` - Form field definitions.
+- `lib/prisma.ts` - Prisma client setup.
+- `prisma/schema.prisma` - Database schema with `Patient`, `Note`, `Provider`, and `User`.
 
-Returns all patients in the database.
+## Database Overview
 
-#### POST `/api/user`
+The database uses SQLite through Prisma. No separate database server is required.
 
-Creates a new patient with provided data fields.
+The schema includes:
 
-#### PATCH `/api/user`
+- `Patient` - Stores patient intake, medical, insurance, appointment, travel, payment, notes, and status fields.
+- `Note` - Stores notes connected to a patient by `patientId`.
+- `Provider` - Stores provider records. In this milestone, provider login checks the provider `name` field against the login email.
+- `User` - Stores general user records for future expansion.
 
-Updates an existing patient by email or ID.
+The database connection is configured through:
 
-#### DELETE `/api/user`
+```env
+DATABASE_URL="file:./dev.db"
+```
 
-Deletes a patient by email or ID.
+## API Endpoints
 
-### Database Schema
+### GET `/api/user`
 
-The `Patient` model includes:
+Returns all patients.
 
-- Basic info: firstName, lastName, email, dateOfBirth, gender, phoneNumber
-- Address: streetAddress, city, state, zipCode, country
-- Medical: bloodType, allergies, currentMedications, medicalConditions, pastSurgeries
-- Emergency contact information
-- Insurance details
-- Appointment preferences
-- Travel information
-- Payment information
-- **New fields:** notes, status
+### POST `/api/user`
 
-### Branches
+Creates a new patient.
 
-- **main** - Default branch
-- **module-1** - Initial patient data entry system
-- **module-2** - Patient management dashboard with full CRUD operations (current alpha)
+### PATCH `/api/user`
 
-### Future Plans
+Updates a patient.
 
-- Adding authentication and user accounts
-- Implementing clinic and hotel service management
-- Building package builder for travel and medical services
-- Enhanced reporting and analytics
-- Deployment to AWS or cloud platform
-- Advanced search and filtering capabilities
-- Multi-user collaboration features
+### DELETE `/api/user`
 
-## How to Run
+Deletes a patient.
 
-1. Clone the repository:
+### GET `/api/auth/provider?email=...`
 
-   ```bash
-   git clone https://github.com/kmartyxian/Capstone-Project.git
-   cd Capstone-Project
+Checks whether a provider login is valid.
+
+Important detail: this milestone checks the `Provider.name` field against the submitted email.
+
+### GET `/api/auth/patient?email=...`
+
+Checks whether a patient login is valid and returns the patient id.
+
+### GET `/api/notes?patientId=...`
+
+Returns notes for one patient.
+
+### POST `/api/notes`
+
+Creates a note for one patient.
+
+Required body fields:
+
+- `patientId`
+- `content`
+
+## How To Run Milestone 3 Step By Step
+
+### 1. Install prerequisites
+
+Install:
+
+- Node.js 20 or newer.
+- npm.
+- Git.
+
+Check versions:
+
+```bash
+node -v
+npm -v
+git --version
+```
+
+### 2. Clone the repository
+
+```bash
+git clone https://github.com/kmartyxian/Capstone-Project.git
+cd Capstone-Project
+```
+
+### 3. Switch to the milestone 3 branch
+
+```bash
+git checkout milestone-3
+```
+
+### 4. Install dependencies
+
+```bash
+npm install
+```
+
+On Windows PowerShell, if `npm` is blocked, use:
+
+```bash
+npm.cmd install
+```
+
+### 5. Create the environment file
+
+Create `.env` in the project root:
+
+```env
+DATABASE_URL="file:./dev.db"
+```
+
+### 6. Create and sync the database
+
+```bash
+npx prisma db push
+```
+
+This creates the SQLite database and all tables from `prisma/schema.prisma`.
+
+If Prisma Client needs to be regenerated:
+
+```bash
+npx prisma generate
+```
+
+### 7. Add required login data to the database
+
+Milestone 3 login depends on data existing in the SQLite database. The easiest way to add data is Prisma Studio.
+
+Start Prisma Studio:
+
+```bash
+npx prisma studio
+```
+
+Open the URL shown in the terminal, usually:
+
+```text
+http://localhost:5555
+```
+
+#### Add a provider login
+
+1. Open the `Provider` table.
+2. Add a row.
+3. Set `name` to an email-like value, for example:
+
+   ```text
+   provider@example.com
    ```
 
-2. Install dependencies:
+4. Set `location`, for example:
 
-   ```bash
-   npm install
+   ```text
+   Chicago, IL
    ```
 
-3. Set up the database:
+5. Save the row.
 
-   ```bash
-   npx prisma db push
+Provider login uses the provider `name` field as the login value in this milestone.
+
+#### Add a patient login
+
+1. Open the `Patient` table.
+2. Add a row.
+3. Set `email`, for example:
+
+   ```text
+   patient@example.com
    ```
 
-4. Start the development server:
+4. Optional useful fields:
 
-   ```bash
-   npm run dev
+   ```text
+   firstName: Test
+   lastName: Patient
+   phoneNumber: 5551234567
+   status: Active
+   reasonForVisit: Consultation
    ```
 
-5. Open your browser and navigate to `http://localhost:3000`
+5. Save the row.
 
-## Video Demonstration
+Patient login uses the `Patient.email` field.
 
-A ~5 minute video demonstrating the project features and code walkthrough has been recorded and should be uploaded to the GitHub repository. The video covers:
+### 8. Start the development server
 
-- Project overview and purpose
-- Features implemented in Module 2
-- Live demonstration of patient management operations
-- Database schema and API design
-- Code walkthrough of key components
+```bash
+npm run dev
+```
 
-## Repository
+On Windows PowerShell, if needed:
 
-GitHub: https://github.com/kmartyxian/Capstone-Project
+```bash
+npm.cmd run dev
+```
+
+### 9. Open the application
+
+Open:
+
+```text
+http://localhost:3000
+```
+
+## How To Use The Milestone 3 Program
+
+### Provider login flow
+
+1. Open `http://localhost:3000`.
+2. In the Provider Login section, enter the provider value you created in Prisma Studio, such as `provider@example.com`.
+3. Click the login button.
+4. If the provider exists, the app stores a local session and redirects to `/patients`.
+5. On `/patients`, view, add, edit, or delete patient records.
+
+### Patient login flow
+
+1. Open `http://localhost:3000`.
+2. In the Patient Login section, enter a patient email that exists in the database, such as `patient@example.com`.
+3. Click the login button.
+4. If the patient exists, the app stores a local session and redirects to `/profile`.
+5. On `/profile`, view and edit patient information.
+6. Add notes in the Notes section.
+
+### Patient dashboard flow
+
+1. Open `http://localhost:3000/patients`.
+2. View all patients.
+3. Use **+ Add Patient** to create a record.
+4. Use **Edit** to update a record.
+5. Use **Delete** to remove a record.
+
+### Patient notes flow
+
+1. Log in as a patient.
+2. Go to `/profile`.
+3. Type text in the notes box.
+4. Click **Add Note**.
+5. The app sends a POST request to `/api/notes`.
+6. The note is saved in the `Note` table with the current patient id.
+
+## How To Test The API Manually
+
+Create a patient:
+
+```powershell
+Invoke-WebRequest -Uri http://localhost:3000/api/user `
+  -Method POST `
+  -ContentType "application/json" `
+  -Body '{"firstName":"Test","lastName":"Patient","email":"patient@example.com","status":"Active"}'
+```
+
+Create a note after getting a patient id:
+
+```powershell
+Invoke-WebRequest -Uri http://localhost:3000/api/notes `
+  -Method POST `
+  -ContentType "application/json" `
+  -Body '{"patientId":"PASTE_PATIENT_ID_HERE","content":"Patient requested travel follow-up."}'
+```
+
+Check provider login:
+
+```powershell
+Invoke-WebRequest -Uri "http://localhost:3000/api/auth/provider?email=provider@example.com" -UseBasicParsing
+```
+
+Check patient login:
+
+```powershell
+Invoke-WebRequest -Uri "http://localhost:3000/api/auth/patient?email=patient@example.com" -UseBasicParsing
+```
+
+## Video Walkthrough
+
+Video link: https://youtu.be/Vh8k9aK8GjM
+
+## Future Plans
+
+- Replace email-only login with secure authentication.
+- Add provider account management.
+- Add package builder features for clinics, hotels, and flights.
+- Add advanced search and filtering.
+- Add reports and analytics.
+- Improve design and accessibility.
+- Deploy the application to a cloud platform.

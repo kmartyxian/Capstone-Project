@@ -1,9 +1,6 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { addressFields, appointmentFields, emergencyContactFields, insuranceFields, medicalInfoFields, patientInfoFields, paymentFields, personalInfoFields, travelInfoFields } from "./patientFields";
-import HandleSubmitToPost from "./Login";
-import GetEmail from "./Login";
 
 export default function AddData({ fields, email }: { fields: any[]; email: string }) {
     const [error, setError] = useState("");

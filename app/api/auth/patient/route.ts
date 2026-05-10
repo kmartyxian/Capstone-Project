@@ -17,3 +17,33 @@ export async function GET(request: Request) {
     patientId: patient?.id,
   });
 }
+
+export async function POST(request: Request) {
+  const body = await request.json();
+  const { firstName, lastName, email, phoneNumber, dateOfBirth } = body;
+
+  if (!email || typeof email !== "string") {
+    return new Response("Email is required.", { status: 400 });
+  }
+
+  const existingPatient = await prisma.patient.findUnique({
+    where: { email },
+  });
+
+  if (existingPatient) {
+    return new Response("Patient already exists.", { status: 400 });
+  }
+
+  const patient = await prisma.patient.create({
+    data: {
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
+      dateOfBirth: dateOfBirth ? new Date(`${dateOfBirth}T00:00:00.000Z`) : undefined,
+      status: "Active",
+    },
+  });
+
+  return Response.json({ patientId: patient.id, email: patient.email });
+}

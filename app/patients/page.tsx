@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import AddPatientModal from "@/components/AddPatientModal";
 import EditPatientModal from "@/components/EditPatientModal";
 import PatientTable from "@/components/PatientTable";
@@ -51,6 +52,9 @@ export default function Page() {
       <div className="mx-auto max-w-6xl rounded bg-white p-6 shadow-sm">
         <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
+            <Link href="/" className="mb-2 inline-block text-sm text-blue-600 hover:underline">
+              Back to Login
+            </Link>
             <h1 className="text-2xl font-semibold text-slate-900">Patients</h1>
             <p className="mt-1 text-sm text-slate-600">View, add, edit, and remove patients quickly.</p>
           </div>

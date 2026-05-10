@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { addressFields, appointmentFields, emergencyContactFields, insuranceFields, medicalInfoFields, patientInfoFields, paymentFields, personalInfoFields, travelInfoFields } from "./patientFields";
 
 export default function Login({ fields: loginFields, onLogin }: { fields: any[]; onLogin: (email: string) => void }) {
     const [error, setError] = useState("");

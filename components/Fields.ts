@@ -60,8 +60,16 @@ export const loginFields = [
   { name: "email", label: "Email", placeholder: "Enter email", type: "email" },
 ];
 
+export const patientRegistrationFields = [
+  personalInfoFields[0],
+  personalInfoFields[1],
+  loginFields[0],
+  personalInfoFields[4],
+  personalInfoFields[2],
+];
 
-export const patientInfoFields = {
+
+export const InfoFields = {
   personalInfoFields,
   addressFields,
   emergencyContactFields,
@@ -70,5 +78,6 @@ export const patientInfoFields = {
   appointmentFields,
   travelInfoFields,
   paymentFields,
-  loginFields
+  loginFields,
+  patientRegistrationFields
 };

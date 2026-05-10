@@ -83,6 +83,7 @@ model Note {
 model Provider {
   id        String   @id @default(cuid())
   name      String
+  email     String?
   location  String
   createdAt DateTime @default(now())
 }
@@ -93,4 +94,3 @@ model User {
   location  String
   createdAt DateTime @default(now())
 }
-
