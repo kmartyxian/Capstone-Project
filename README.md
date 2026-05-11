@@ -12,10 +12,6 @@ The Medical Tourism Platform is a full-stack web application for managing the pa
 
 The final version combines the work from the milestone branches into one main branch. The app includes patient intake, a provider-facing patient management dashboard, patient and provider login flows, patient profile editing, and notes connected to patient records.
 
-## Final Presentation
-
-Final presentation video: https://youtu.be/AyM8-f9WLmM
-
 ## Milestone README Sections
 
 This README consolidates the milestone README information into one main-branch document. The extracted project contained one README for Milestone 3; the Milestone 1 and Milestone 2 sections below are separated from the completed progress described in the final milestone documentation.
@@ -398,6 +394,10 @@ Invoke-WebRequest -Uri "http://localhost:3000/api/auth/patient?email=patient@exa
 ### Video Walkthrough
 
 Milestone 3 walkthrough video: https://youtu.be/Vh8k9aK8GjM
+
+### Final Presentation
+
+Final presentation video: https://youtu.be/AyM8-f9WLmM
 
 ### Future Plans
 
