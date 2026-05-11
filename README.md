@@ -292,6 +292,8 @@ Invoke-WebRequest -Uri http://localhost:3000/api/user `
 
 Video link: https://youtu.be/4Uwi3NalKRQ
 
+Viewing note: This walkthrough was recorded in vertical portrait orientation and is easiest to watch on a phone.
+
 ## Future Plans
 
 - Add provider and patient login.
