@@ -63,6 +63,8 @@ Important Milestone 2 files:
 
 Video link: https://youtu.be/4Uwi3NalKRQ
 
+Viewing note: This walkthrough was recorded in vertical portrait orientation and is easiest to watch on a phone.
+
 ## Milestone 3 README
 
 Milestone 3 expands the app beyond the patient management dashboard by adding basic role-based flows for patients and providers, patient profile editing, and notes connected to patient records.
@@ -402,6 +404,8 @@ Invoke-WebRequest -Uri "http://localhost:3000/api/auth/patient?email=patient@exa
 ### Video Walkthrough
 
 Video link: https://youtu.be/Vh8k9aK8GjM
+
+Viewing note: This walkthrough was recorded in vertical portrait orientation and is easiest to watch on a phone.
 
 ### Future Plans
 
