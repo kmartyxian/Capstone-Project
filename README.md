@@ -14,7 +14,7 @@ The final version combines the work from the milestone branches into one main br
 
 ## Milestone README Sections
 
-This README consolidates the milestone README information into one main-branch document. The extracted project contained one README for Milestone 3; the Milestone 1 and Milestone 2 sections below are separated from the completed progress described in the final milestone documentation.
+This README consolidates the milestone README information into one main-branch document. Each milestone section includes its own video walkthrough link.
 
 ## Milestone 1 README
 
@@ -35,6 +35,10 @@ Important Milestone 1 files:
 - `lib/prisma.ts` - Prisma client setup.
 - `prisma/schema.prisma` - Database schema.
 
+### Video Walkthrough
+
+Video link: https://youtu.be/sw-mpkqt8vU
+
 ## Milestone 2 README
 
 Milestone 2 expanded the patient intake work into a provider-facing patient management dashboard.
@@ -54,6 +58,10 @@ Important Milestone 2 files:
 - `components/AddPatientModal.tsx` - Add patient modal.
 - `components/EditPatientModal.tsx` - Edit patient modal.
 - `app/api/user/route.ts` - Patient CRUD API.
+
+### Video Walkthrough
+
+Video link: https://youtu.be/Vh8k9aK8GjM
 
 ## Milestone 3 README
 
@@ -391,9 +399,105 @@ Check patient login:
 Invoke-WebRequest -Uri "http://localhost:3000/api/auth/patient?email=patient@example.com" -UseBasicParsing
 ```
 
-### Video Demo
+### Video Walkthrough
 
-Final milestone video demo: https://youtu.be/AyM8-f9WLmM
+Video link: https://youtu.be/Vh8k9aK8GjM
+
+### Future Plans
+
+- Replace email-only login with secure authentication.
+- Add provider account management.
+- Add package builder features for clinics, hotels, and flights.
+- Add advanced search and filtering.
+- Add reports and analytics.
+- Improve design and accessibility.
+- Deploy the application to a cloud platform.
+
+## Final Milestone README
+
+The final milestone combines the earlier milestone work into the main branch and keeps the project code together in one place. It includes patient intake, the provider patient dashboard, patient and provider login flows, patient profile editing, individual patient routes, and notes connected to patient records.
+
+### Final Milestone Overview
+
+The final milestone demonstrates the completed capstone workflow:
+
+- Providers can log in and manage patient records.
+- Patients can log in and view or edit their own profile.
+- Patient records can be added, edited, deleted, and reviewed from the dashboard.
+- Notes can be created and stored for patient records.
+- Prisma and SQLite continue to provide the database layer.
+- The project is consolidated on the `main` branch.
+
+### Current Progress
+
+Completed in the final milestone:
+
+- Patient data entry from Milestone 1.
+- Patient management dashboard from Milestone 2.
+- Role-based patient and provider flows from Milestone 3.
+- Patient profile page at `/profile`.
+- Patient detail page at `/patients/[id]`.
+- Notes API connected to patient records.
+- Final README consolidation for all milestone documentation.
+- Main branch setup with the final project code.
+
+Not finished yet:
+
+- Secure production authentication.
+- Password support.
+- Full provider account management.
+- Deployment.
+- Advanced reporting and analytics.
+- Travel package builder for clinics, hotels, and flights.
+
+### Technologies Used
+
+- Next.js 16
+- React 19
+- TypeScript
+- Prisma ORM
+- SQLite
+- Tailwind CSS
+- Node.js and npm
+
+### Important Project Files
+
+- `app/page.tsx` - Login screen with provider and patient login sections.
+- `app/patients/page.tsx` - Provider-facing patient dashboard.
+- `app/patients/[id]/page.tsx` - Individual patient route.
+- `app/profile/page.tsx` - Patient-facing profile page.
+- `app/api/user/route.ts` - Patient CRUD API.
+- `app/api/auth/provider/route.ts` - Provider login validation API.
+- `app/api/auth/patient/route.ts` - Patient login validation API.
+- `app/api/notes/route.ts` - Notes API.
+- `components/PatientTable.tsx` - Patient table component.
+- `components/AddPatientModal.tsx` - Add patient modal.
+- `components/EditPatientModal.tsx` - Edit patient modal.
+- `components/Login.tsx` - Reusable email login component.
+- `components/Fields.ts` - Form field definitions.
+- `lib/prisma.ts` - Prisma client setup.
+- `prisma/schema.prisma` - Database schema.
+
+### How To Run The Final Milestone
+
+```bash
+git clone https://github.com/kmartyxian/Capstone-Project.git
+cd Capstone-Project
+git checkout main
+npm install
+npx prisma db push
+npm run dev
+```
+
+Open:
+
+```text
+http://localhost:3000
+```
+
+### Video Walkthrough
+
+Video link: https://youtu.be/AyM8-f9WLmM
 
 ### Future Plans
 
