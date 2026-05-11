@@ -499,7 +499,7 @@ Open:
 http://localhost:3000
 ```
 
-### Video Walkthrough
+### Video Demo
 
 Video link: https://youtu.be/AyM8-f9WLmM
 
