@@ -344,9 +344,9 @@ Check patient login:
 Invoke-WebRequest -Uri "http://localhost:3000/api/auth/patient?email=patient@example.com" -UseBasicParsing
 ```
 
-## Video Walkthrough
+## Video Demo
 
-Video link: https://youtu.be/Vh8k9aK8GjM
+Video link: https://youtu.be/AyM8-f9WLmM
 
 ## Future Plans
 
