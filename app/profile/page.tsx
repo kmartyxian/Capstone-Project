@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { InfoFields } from "@/components/Fields";
@@ -11,8 +11,7 @@ type Patient = {
   lastName?: string | null;
   email: string;
   status?: string | null;
-  [key: string]: any;
-};
+} & Record<string, string | null | undefined>;
 
 type Note = {
   id: string;
@@ -23,10 +22,29 @@ type Note = {
 export default function ProfilePage() {
   const router = useRouter();
   const [patient, setPatient] = useState<Patient | null>(null);
-  const [formData, setFormData] = useState<Record<string, string>>({});
+  const [formData, setFormData] = useState<Record<string, string | null | undefined>>({});
   const [notes, setNotes] = useState<Note[]>([]);
   const [newNote, setNewNote] = useState("");
   const [loading, setLoading] = useState(true);
+  const [saveMessage, setSaveMessage] = useState("");
+
+  const loadPatient = useCallback(async (email: string) => {
+    setLoading(true);
+    const response = await fetch("/api/user");
+    const patients = await response.json();
+    const found = patients.find((p: Patient) => p.email === email);
+    if (found) {
+      setPatient(found);
+      setFormData(found);
+    }
+    setLoading(false);
+  }, []);
+
+  const loadNotes = useCallback(async (patientId: string) => {
+    const response = await fetch(`/api/notes?patientId=${patientId}`);
+    const data = await response.json();
+    setNotes(data);
+  }, []);
 
   useEffect(() => {
     const session = localStorage.getItem("session");
@@ -41,39 +59,38 @@ export default function ProfilePage() {
       return;
     }
 
-    loadPatient(email);
-    if (patientId) loadNotes(patientId);
-  }, [router]);
+    const timer = window.setTimeout(() => {
+      loadPatient(email);
+      if (patientId) loadNotes(patientId);
+    }, 0);
 
-  async function loadPatient(email: string) {
-    setLoading(true);
-    const response = await fetch("/api/user");
-    const patients = await response.json();
-    const found = patients.find((p: Patient) => p.email === email);
-    if (found) {
-      setPatient(found);
-      setFormData(found);
-    }
-    setLoading(false);
-  }
-
-  async function loadNotes(patientId: string) {
-    const response = await fetch(`/api/notes?patientId=${patientId}`);
-    const data = await response.json();
-    setNotes(data);
-  }
+    return () => window.clearTimeout(timer);
+  }, [router, loadPatient, loadNotes]);
 
   async function handleSave() {
     if (!patient) return;
 
-    const response = await fetch("/api/user", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: patient.id, ...formData }),
-    });
+    setSaveMessage("Saving...");
 
-    if (response.ok) {
-      loadPatient(patient.email);
+    try {
+      const response = await fetch("/api/user", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: patient.id, ...formData }),
+      });
+
+      if (!response.ok) {
+        const message = await response.text();
+        setSaveMessage(message || "Unable to save changes.");
+        return;
+      }
+
+      const updated = await response.json();
+      setPatient(updated);
+      setFormData(updated);
+      setSaveMessage("Changes saved.");
+    } catch {
+      setSaveMessage("Unable to save changes.");
     }
   }
 
@@ -94,6 +111,15 @@ export default function ProfilePage() {
 
   if (loading) return <p>Loading...</p>;
   if (!patient) return <p>Patient not found.</p>;
+
+  function formatInputValue(fieldName: string, fieldType: string) {
+    const value = formData[fieldName];
+
+    if (!value) return "";
+    if (fieldType === "date" && value.includes("T")) return value.slice(0, 10);
+
+    return value;
+  }
 
   const sections = [
     { title: "Personal Info", fields: InfoFields.personalInfoFields },
@@ -124,6 +150,7 @@ export default function ProfilePage() {
             Save Changes
           </button>
         </div>
+        {saveMessage && <p className="text-sm text-slate-600">{saveMessage}</p>}
 
         <div className="rounded bg-white p-6 shadow-sm">
           <h2 className="text-xl font-semibold text-slate-900">
@@ -145,7 +172,7 @@ export default function ProfilePage() {
                   <input
                     type={field.type}
                     placeholder={field.placeholder}
-                    value={formData[field.name] || ""}
+                    value={formatInputValue(field.name, field.type)}
                     onChange={(e) =>
                       setFormData({ ...formData, [field.name]: e.target.value })
                     }

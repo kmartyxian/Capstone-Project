@@ -22,11 +22,20 @@ export default function Register({
     ];
 
   async function handleRegister() {
-    const response = await fetch(`/api/auth/${role}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    });
+    setError("");
+
+    let response: Response;
+
+    try {
+      response = await fetch(`/api/auth/${role}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+    } catch {
+      setError("Registration failed. Please try again.");
+      return;
+    }
 
     if (!response.ok) {
       const message = await response.text();

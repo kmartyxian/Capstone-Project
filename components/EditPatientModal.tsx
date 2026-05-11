@@ -1,5 +1,6 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { InfoFields } from "./Fields";
 
 type Patient = {
   id: string;
@@ -8,7 +9,26 @@ type Patient = {
   email: string;
   notes?: string | null;
   status?: string | null;
+} & Record<string, string | null | undefined>;
+
+type Field = {
+  name: string;
+  label: string;
+  placeholder: string;
+  type: string;
 };
+
+const sections: { title: string; fields: Field[] }[] = [
+  { title: "Personal Info", fields: InfoFields.personalInfoFields },
+  { title: "Address", fields: InfoFields.addressFields },
+  { title: "Emergency Contact", fields: InfoFields.emergencyContactFields },
+  { title: "Medical Info", fields: InfoFields.medicalInfoFields },
+  { title: "Insurance", fields: InfoFields.insuranceFields },
+  { title: "Appointment", fields: InfoFields.appointmentFields },
+  { title: "Travel Info", fields: InfoFields.travelInfoFields },
+  { title: "Payment", fields: InfoFields.paymentFields },
+  { title: "Login", fields: InfoFields.loginFields },
+];
 
 export default function EditPatientModal({
   patient,
@@ -19,23 +39,27 @@ export default function EditPatientModal({
   onClose: () => void;
   onSaved: () => void;
 }) {
-  const [firstName, setFirstName] = useState(patient.firstName ?? "");
-  const [lastName, setLastName] = useState(patient.lastName ?? "");
-  const [email, setEmail] = useState(patient.email);
-  const [notes, setNotes] = useState(patient.notes ?? "");
-  const [status, setStatus] = useState(patient.status ?? "Active");
+  const [formData, setFormData] = useState<Record<string, string | null | undefined>>(patient);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    setFirstName(patient.firstName ?? "");
-    setLastName(patient.lastName ?? "");
-    setEmail(patient.email);
-    setNotes(patient.notes ?? "");
-    setStatus(patient.status ?? "Active");
-  }, [patient]);
+  function formatInputValue(fieldName: string, fieldType: string) {
+    const value = formData[fieldName];
+
+    if (!value) return "";
+    if (fieldType === "date" && value.includes("T")) return value.slice(0, 10);
+
+    return value;
+  }
+
+  function updateField(fieldName: string, value: string) {
+    setFormData({ ...formData, [fieldName]: value });
+  }
 
   async function handleSave() {
-    if (!firstName.trim() || !email.trim()) {
+    const firstName = formData.firstName?.trim() || "";
+    const email = formData.email?.trim() || "";
+
+    if (!firstName || !email) {
       setError("First name and email are required.");
       return;
     }
@@ -48,11 +72,12 @@ export default function EditPatientModal({
       body: JSON.stringify({
         id: patient.id,
         currentEmail: patient.email,
-        firstName: firstName.trim(),
-        lastName: lastName.trim(),
-        email: email.trim(),
-        notes: notes.trim() || null,
-        status,
+        ...formData,
+        firstName,
+        email,
+        lastName: formData.lastName?.trim() || null,
+        notes: formData.notes?.trim() || null,
+        status: formData.status || "Active",
       }),
     });
 
@@ -68,70 +93,67 @@ export default function EditPatientModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/30 p-4">
-      <div className="w-full max-w-lg rounded bg-white p-6 shadow-lg">
-        <div className="mb-4 flex items-center justify-between">
+      <div className="max-h-[90vh] w-full max-w-5xl overflow-hidden rounded bg-white shadow-lg">
+        <div className="mb-4 flex items-center justify-between px-6 pt-6">
           <h2 className="text-lg font-semibold text-slate-900">Edit Patient</h2>
           <button type="button" onClick={onClose} className="text-slate-500 hover:text-slate-900">
             Close
           </button>
         </div>
 
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-slate-700">First name</label>
-            <input
-              value={firstName}
-              onChange={(event) => setFirstName(event.target.value)}
-              className="mt-1 w-full rounded border border-slate-300 px-3 py-2"
-            />
-          </div>
+        <div className="max-h-[calc(90vh-150px)] space-y-6 overflow-y-auto px-6">
+          {sections.map((section) => (
+            <section key={section.title}>
+              <h3 className="mb-3 text-base font-semibold text-slate-900">{section.title}</h3>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                {section.fields.map((field) => (
+                  <div key={field.name}>
+                    <label className="block text-sm font-medium text-slate-700">{field.label}</label>
+                    <input
+                      type={field.type}
+                      placeholder={field.placeholder}
+                      value={formatInputValue(field.name, field.type)}
+                      onChange={(event) => updateField(field.name, event.target.value)}
+                      className="mt-1 w-full rounded border border-slate-300 px-3 py-2"
+                    />
+                  </div>
+                ))}
+              </div>
+            </section>
+          ))}
 
-          <div>
-            <label className="block text-sm font-medium text-slate-700">Last name</label>
-            <input
-              value={lastName}
-              onChange={(event) => setLastName(event.target.value)}
-              className="mt-1 w-full rounded border border-slate-300 px-3 py-2"
-            />
-          </div>
+          <section>
+            <h3 className="mb-3 text-base font-semibold text-slate-900">Notes and Status</h3>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div>
+                <label className="block text-sm font-medium text-slate-700">Notes</label>
+                <textarea
+                  value={formData.notes || ""}
+                  onChange={(event) => updateField("notes", event.target.value)}
+                  className="mt-1 w-full rounded border border-slate-300 px-3 py-2"
+                  rows={4}
+                />
+              </div>
 
-          <div>
-            <label className="block text-sm font-medium text-slate-700">Email</label>
-            <input
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              type="email"
-              className="mt-1 w-full rounded border border-slate-300 px-3 py-2"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-slate-700">Notes</label>
-            <textarea
-              value={notes}
-              onChange={(event) => setNotes(event.target.value)}
-              className="mt-1 w-full rounded border border-slate-300 px-3 py-2"
-              rows={4}
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-slate-700">Status</label>
-            <select
-              value={status}
-              onChange={(event) => setStatus(event.target.value)}
-              className="mt-1 w-full rounded border border-slate-300 px-3 py-2"
-            >
-              <option>Active</option>
-              <option>Inactive</option>
-              <option>Follow up</option>
-            </select>
-          </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-700">Status</label>
+                <select
+                  value={formData.status || "Active"}
+                  onChange={(event) => updateField("status", event.target.value)}
+                  className="mt-1 w-full rounded border border-slate-300 px-3 py-2"
+                >
+                  <option>Active</option>
+                  <option>Inactive</option>
+                  <option>Follow up</option>
+                </select>
+              </div>
+            </div>
+          </section>
         </div>
 
-        {error && <p className="mt-4 text-sm text-rose-600">{error}</p>}
+        {error && <p className="mt-4 px-6 text-sm text-rose-600">{error}</p>}
 
-        <div className="mt-6 flex justify-end gap-3">
+        <div className="mt-6 flex justify-end gap-3 border-t border-slate-200 px-6 py-4">
           <button
             type="button"
             onClick={onClose}

@@ -186,29 +186,87 @@ else {
 
 
 export async function PATCH(request: Request) {
-    const body = await request.json();
-    const { id, currentEmail, ...updateData } = body;
-    const where = id ? { id } : currentEmail ? { email: currentEmail } : null;
+    try {
+      const body = await request.json();
+      const { id, currentEmail } = body;
+      const where = id ? { id } : currentEmail ? { email: currentEmail } : null;
 
-    if (!where) {
-      return new Response("Patient identifier is required.", { status: 400 });
-    }
-
-    if (typeof updateData.dateOfBirth === "string") {
-      const dob = updateData.dateOfBirth.trim();
-
-      if (dob === "") {
-        delete updateData.dateOfBirth;
-      } else {
-        updateData.dateOfBirth = new Date(`${dob}T00:00:00.000Z`);
+      if (!where) {
+        return new Response("Patient identifier is required.", { status: 400 });
       }
-    }
 
-    const update = await prisma.patient.update({
-        where,
-        data: updateData,
-    });
-    return new Response(JSON.stringify(update));
+      const editableFields = [
+        "firstName",
+        "lastName",
+        "dateOfBirth",
+        "gender",
+        "phoneNumber",
+        "email",
+        "streetAddress",
+        "city",
+        "state",
+        "zipCode",
+        "country",
+        "emergencyContactName",
+        "emergencyContactPhone",
+        "emergencyContactRelationship",
+        "bloodType",
+        "allergies",
+        "currentMedications",
+        "medicalConditions",
+        "pastSurgeries",
+        "insuranceProvider",
+        "policyNumber",
+        "groupNumber",
+        "preferredDate",
+        "preferredTime",
+        "reasonForVisit",
+        "passportNumber",
+        "nationality",
+        "arrivalDate",
+        "departureDate",
+        "hotelPreference",
+        "cardholderName",
+        "cardNumber",
+        "expirationDate",
+        "cvv",
+        "billingAddress",
+        "notes",
+        "status",
+      ];
+
+      const updateData: Record<string, string | Date | null> = {};
+
+      for (const field of editableFields) {
+        if (field in body) {
+          updateData[field] = body[field];
+        }
+      }
+
+      if ("street" in body && !("streetAddress" in updateData)) {
+        updateData.streetAddress = body.street;
+      }
+
+      if (typeof updateData.dateOfBirth === "string") {
+        const dob = updateData.dateOfBirth.trim();
+
+        if (dob === "") {
+          updateData.dateOfBirth = null;
+        } else if (dob.includes("T")) {
+          updateData.dateOfBirth = new Date(dob);
+        } else {
+          updateData.dateOfBirth = new Date(`${dob}T00:00:00.000Z`);
+        }
+      }
+
+      const update = await prisma.patient.update({
+          where,
+          data: updateData,
+      });
+      return Response.json(update);
+    } catch (error) {
+      return new Response("Error updating patient: " + error, { status: 500 });
+    }
 }
 
 export async function DELETE(request: Request) {
@@ -226,4 +284,3 @@ export async function DELETE(request: Request) {
 
     return new Response(JSON.stringify(deleted));
 }
-

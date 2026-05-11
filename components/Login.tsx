@@ -1,44 +1,32 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 
-export default function Login({ fields: loginFields, onLogin }: { fields: any[]; onLogin: (email: string) => void }) {
-    const [error, setError] = useState("");
-    const router = useRouter();
-    const [form, setform] = useState<any>([]);
-    const [email, setEmail] = useState("");
+type LoginField = {
+    name: string;
+    type: string;
+    placeholder: string;
+};
+
+export default function Login({ fields: loginFields, onLogin }: { fields: LoginField[]; onLogin: (email: string) => void }) {
+    const [form, setForm] = useState<Record<string, string>>({});
 
 
     async function HandleSubmitToPost() {
-        const formObj = Object.fromEntries(
-            loginFields.map((field: any, i: number) => [field.name, form[i]])
-        );
-        
-        
-
-        onLogin(formObj.email);
-
+        onLogin(form.email || "");
 
     }
 
-    function GetEmail() {
-        return email;
-    }
-
-    function GetPatientInfo({ fields }: { fields: any[] }) {
-        return fields.map(function (field, i) {
+    function GetPatientInfo({ fields }: { fields: LoginField[] }) {
+        return fields.map(function (field) {
             return (
                 <input
                     key={field.name}
                     name={field.name}
                     type={field.type}
                     placeholder={field.placeholder}
-                    value={form[i] || ""}
+                    value={form[field.name] || ""}
                     onChange={(e) => {
-
-                        const formArr = [...form];
-                        formArr[i] = e.target.value;
-                        setform(formArr);
+                        setForm({ ...form, [field.name]: e.target.value });
                     }
                     }
 
@@ -59,7 +47,6 @@ export default function Login({ fields: loginFields, onLogin }: { fields: any[];
             className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
             Login
         </button>
-        {error && <p className="text-red-500">{error}</p>}
     </div>
 
 }

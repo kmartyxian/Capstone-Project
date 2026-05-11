@@ -7,7 +7,7 @@ export const personalInfoFields = [
 ];
 
 export const addressFields = [
-  { name: "street", label: "Street Address", placeholder: "Enter street address", type: "text" },
+  { name: "streetAddress", label: "Street Address", placeholder: "Enter street address", type: "text" },
   { name: "city", label: "City", placeholder: "Enter city", type: "text" },
   { name: "state", label: "State", placeholder: "Enter state", type: "text" },
   { name: "zipCode", label: "Zip Code", placeholder: "Enter zip code", type: "text" },

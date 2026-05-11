@@ -15,8 +15,22 @@ export default function Page() {
     const [patientRegister, setPatientRegister] = useState(false);
 
     async function handleProviderLogin(email: string) {
-        const response = await fetch(`/api/auth/provider?email=${encodeURIComponent(email)}`);
-        const data = await response.json();
+        setProviderError("");
+
+        if (!email) {
+            setProviderError("Enter a provider email");
+            return;
+        }
+
+        let data;
+
+        try {
+            const response = await fetch(`/api/auth/provider?email=${encodeURIComponent(email)}`);
+            data = await response.json();
+        } catch {
+            setProviderError("Provider login failed. Please try again.");
+            return;
+        }
 
         if (data.valid) {
             localStorage.setItem("session", JSON.stringify({ role: "provider", email }));
@@ -27,8 +41,22 @@ export default function Page() {
     }
 
     async function handlePatientLogin(email: string) {
-        const response = await fetch(`/api/auth/patient?email=${encodeURIComponent(email)}`);
-        const data = await response.json();
+        setPatientError("");
+
+        if (!email) {
+            setPatientError("Enter a patient email");
+            return;
+        }
+
+        let data;
+
+        try {
+            const response = await fetch(`/api/auth/patient?email=${encodeURIComponent(email)}`);
+            data = await response.json();
+        } catch {
+            setPatientError("Patient login failed. Please try again.");
+            return;
+        }
 
         if (data.valid) {
             localStorage.setItem("session", JSON.stringify({ role: "patient", email, patientId: data.patientId }));
@@ -56,7 +84,8 @@ export default function Page() {
                                 role="provider"
                                 onRegistered={(email) => {
                                     localStorage.setItem("session", JSON.stringify({ role: "provider", email }));
-                                    setProviderRegister(!providerRegister);
+                                    setProviderRegister(false);
+                                    setProviderError("");
                                 }}
                             />
                         ) : (
@@ -86,7 +115,8 @@ export default function Page() {
                                 role="patient"
                                 onRegistered={(email, patientId) => {
                                     localStorage.setItem("session", JSON.stringify({ role: "patient", email, patientId }));
-                                    setPatientRegister(!patientRegister);
+                                    setPatientRegister(false);
+                                    setPatientError("");
                                 }}
                             />
                         ) : (
