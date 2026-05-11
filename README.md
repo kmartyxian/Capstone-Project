@@ -422,7 +422,9 @@ Invoke-WebRequest -Uri http://localhost:3000/api/user `
 
 ## Video Walkthrough
 
-Video link: Add Milestone 3 video link here.
+Video link: https://youtu.be/Vh8k9aK8GjM
+
+Viewing note: This walkthrough was recorded in vertical portrait orientation and is easiest to watch on a phone.
 
 ## Future Plans
 
