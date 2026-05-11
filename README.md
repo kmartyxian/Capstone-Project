@@ -61,7 +61,7 @@ Important Milestone 2 files:
 
 ### Video Walkthrough
 
-Video link: https://youtu.be/Vh8k9aK8GjM
+Video link: https://youtu.be/4Uwi3NalKRQ
 
 ## Milestone 3 README
 
