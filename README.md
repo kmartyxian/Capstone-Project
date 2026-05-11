@@ -1,20 +1,20 @@
-# Medical Tourism Platform - Milestone 3
+# Medical Tourism Platform - Final Milestone
 
 **Name:** Jeremy Wanguhu  
 **Course:** CIDS 484  
 **Semester:** Spring 2026  
 **Repository:** https://github.com/kmartyxian/Capstone-Project  
-**Branch:** `milestone-3`
+**Branch:** `final-milestone`
 
 ## Project Description
 
 The Medical Tourism Platform is a full-stack web application for managing the patient side and provider side of a medical tourism workflow. It stores patient intake information, medical history, emergency contacts, insurance details, appointment preferences, travel details, notes, and patient status.
 
-Milestone 3 expands the app beyond the patient management dashboard by adding basic role-based flows for patients and providers, patient profile editing, and notes connected to patient records.
+The final milestone combines the completed capstone work into one version of the Medical Tourism Platform. It includes patient intake, provider-facing patient management, patient and provider login flows, patient profile editing, and notes connected to patient records.
 
-## Milestone 3 Overview
+## Final Milestone Overview
 
-Milestone 3 demonstrates a more complete workflow:
+The final milestone demonstrates the complete workflow:
 
 - Providers can log in and view the patient management dashboard.
 - Patients can log in and view their own profile.
@@ -24,16 +24,16 @@ Milestone 3 demonstrates a more complete workflow:
 
 ## Current Progress
 
-Completed in this milestone:
+Completed in this final milestone:
 
 - Patient data entry from Milestone 1.
 - Patient management dashboard from Milestone 2.
 - Provider login validation.
 - Patient login validation.
 - Patient profile page at `/profile`.
-- Patient detail page structure at `/patients/[id]`.
+- Patient detail page at `/patients/[id]`.
 - Notes API connected to patient records.
-- Prisma schema updated with a `Note` model.
+- Prisma schema with `Patient`, `Note`, `Provider`, and `User` models.
 - Continued SQLite database integration.
 
 Not finished yet:
@@ -81,7 +81,7 @@ The schema includes:
 
 - `Patient` - Stores patient intake, medical, insurance, appointment, travel, payment, notes, and status fields.
 - `Note` - Stores notes connected to a patient by `patientId`.
-- `Provider` - Stores provider records. In this milestone, provider login checks the provider `name` field against the login email.
+- `Provider` - Stores provider records. In the final milestone, provider login checks the provider `name` field against the login email.
 - `User` - Stores general user records for future expansion.
 
 The database connection is configured through:
@@ -112,7 +112,7 @@ Deletes a patient.
 
 Checks whether a provider login is valid.
 
-Important detail: this milestone checks the `Provider.name` field against the submitted email.
+Important detail: this final milestone checks the `Provider.name` field against the submitted email.
 
 ### GET `/api/auth/patient?email=...`
 
@@ -131,7 +131,7 @@ Required body fields:
 - `patientId`
 - `content`
 
-## How To Run Milestone 3 Step By Step
+## How To Run The Final Milestone Step By Step
 
 ### 1. Install prerequisites
 
@@ -156,10 +156,10 @@ git clone https://github.com/kmartyxian/Capstone-Project.git
 cd Capstone-Project
 ```
 
-### 3. Switch to the milestone 3 branch
+### 3. Switch to the final milestone branch
 
 ```bash
-git checkout milestone-3
+git checkout final-milestone
 ```
 
 ### 4. Install dependencies
@@ -198,7 +198,7 @@ npx prisma generate
 
 ### 7. Add required login data to the database
 
-Milestone 3 login depends on data existing in the SQLite database. The easiest way to add data is Prisma Studio.
+Final milestone login depends on data existing in the SQLite database. The easiest way to add data is Prisma Studio.
 
 Start Prisma Studio:
 
@@ -230,7 +230,7 @@ http://localhost:5555
 
 5. Save the row.
 
-Provider login uses the provider `name` field as the login value in this milestone.
+Provider login uses the provider `name` field as the login value in the final milestone.
 
 #### Add a patient login
 
@@ -276,7 +276,7 @@ Open:
 http://localhost:3000
 ```
 
-## How To Use The Milestone 3 Program
+## How To Use The Final Milestone Program
 
 ### Provider login flow
 
