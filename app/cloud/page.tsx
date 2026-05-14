@@ -47,6 +47,10 @@ export default function CloudPage() {
 
       if (!response.ok) {
         const errorText = await response.text();
+        if (errorText.includes("<!DOCTYPE html>")) {
+          setMessage("Cloud route not found. Check the AWS API Gateway URL.");
+          return;
+        }
         setMessage(errorText || "Cloud request failed.");
         return;
       }
@@ -90,6 +94,10 @@ export default function CloudPage() {
 
       if (!response.ok) {
         const errorText = await response.text();
+        if (errorText.includes("<!DOCTYPE html>")) {
+          setUploadMessage("Upload route not found. Check the AWS API Gateway URL.");
+          return;
+        }
         setUploadMessage(errorText || "Unable to get upload URL.");
         return;
       }
