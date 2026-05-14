@@ -13,6 +13,7 @@ export default function CloudPage() {
   const [file, setFile] = useState<File | null>(null);
   const [uploadMessage, setUploadMessage] = useState("");
   const [uploadKey, setUploadKey] = useState("");
+  const [fileInputKey, setFileInputKey] = useState(0);
 
   const cloudApiUrl = process.env.NEXT_PUBLIC_CLOUD_API_URL || "";
 
@@ -109,6 +110,7 @@ export default function CloudPage() {
 
       setFile(null);
       setPatientId("");
+      setFileInputKey(fileInputKey + 1);
       setUploadKey(data.key);
       setUploadMessage("File uploaded to S3.");
     } catch {
@@ -201,6 +203,7 @@ export default function CloudPage() {
             <div>
               <label className="block text-sm font-medium text-slate-700">File</label>
               <input
+                key={fileInputKey}
                 type="file"
                 onChange={(event) => setFile(event.target.files?.[0] || null)}
                 className="mt-1 w-full rounded border border-slate-300 px-3 py-2"
