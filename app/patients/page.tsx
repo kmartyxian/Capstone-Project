@@ -58,13 +58,21 @@ export default function Page() {
             <h1 className="text-2xl font-semibold text-slate-900">Patients</h1>
             <p className="mt-1 text-sm text-slate-600">View, add, edit, and remove patients quickly.</p>
           </div>
-          <button
-            type="button"
-            onClick={() => setShowAdd(true)}
-            className="inline-flex items-center rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
-          >
-            + Add Patient
-          </button>
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <Link
+              href="/cloud"
+              className="inline-flex items-center justify-center rounded border border-blue-600 px-4 py-2 text-sm font-medium text-blue-600 hover:bg-blue-50"
+            >
+              Cloud Request
+            </Link>
+            <button
+              type="button"
+              onClick={() => setShowAdd(true)}
+              className="inline-flex items-center justify-center rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+            >
+              + Add Patient
+            </button>
+          </div>
         </div>
 
         {loading ? (
