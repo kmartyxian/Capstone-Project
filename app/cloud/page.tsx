@@ -14,6 +14,7 @@ export default function CloudPage() {
   const [uploadMessage, setUploadMessage] = useState("");
   const [uploadKey, setUploadKey] = useState("");
   const [fileInputKey, setFileInputKey] = useState(0);
+  const [uploadDone, setUploadDone] = useState(false);
 
   const cloudApiUrl = process.env.NEXT_PUBLIC_CLOUD_API_URL || "";
 
@@ -73,6 +74,7 @@ export default function CloudPage() {
 
     setUploadMessage("Getting S3 upload URL...");
     setUploadKey("");
+    setUploadDone(false);
 
     try {
       const response = await fetch(`${cloudApiUrl}/uploads/url`, {
@@ -113,6 +115,7 @@ export default function CloudPage() {
       setFileInputKey(fileInputKey + 1);
       setUploadKey(data.key);
       setUploadMessage("File uploaded to S3.");
+      setUploadDone(true);
     } catch {
       setUploadMessage("File upload failed.");
     }
@@ -200,27 +203,31 @@ export default function CloudPage() {
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-slate-700">File</label>
-              <input
-                key={fileInputKey}
-                type="file"
-                onChange={(event) => setFile(event.target.files?.[0] || null)}
-                className="mt-1 w-full rounded border border-slate-300 px-3 py-2"
-              />
-            </div>
+            {!uploadDone && (
+              <div>
+                <label className="block text-sm font-medium text-slate-700">File</label>
+                <input
+                  key={fileInputKey}
+                  type="file"
+                  onChange={(event) => setFile(event.target.files?.[0] || null)}
+                  className="mt-1 w-full rounded border border-slate-300 px-3 py-2"
+                />
+              </div>
+            )}
           </div>
 
           {uploadMessage && <p className="mt-4 text-sm text-slate-600">{uploadMessage}</p>}
           {uploadKey && <p className="mt-2 text-sm text-slate-600">S3 key: {uploadKey}</p>}
 
-          <button
-            type="button"
-            onClick={handleUpload}
-            className="mt-6 rounded bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700"
-          >
-            Upload File
-          </button>
+          {!uploadDone && (
+            <button
+              type="button"
+              onClick={handleUpload}
+              className="mt-6 rounded bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700"
+            >
+              Upload File
+            </button>
+          )}
         </div>
       </div>
     </div>
