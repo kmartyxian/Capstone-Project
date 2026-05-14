@@ -190,6 +190,47 @@ Add NEXT_PUBLIC_CLOUD_API_URL to use the AWS API Gateway endpoint.
 
 This makes the page safe to open locally even before AWS is fully set up.
 
+The same cloud page now also has a simple S3 file upload section.
+
+The upload section asks for:
+
+- patient id
+- file
+
+When the user clicks `Upload File`, the page sends the file information to:
+
+```text
+POST {NEXT_PUBLIC_CLOUD_API_URL}/uploads/url
+```
+
+The request body includes:
+
+```json
+{
+  "fileName": "example.pdf",
+  "patientId": "patient-id-here",
+  "contentType": "application/pdf"
+}
+```
+
+Lambda returns:
+
+```json
+{
+  "uploadUrl": "temporary-s3-upload-url",
+  "key": "patient-uploads/patient-id-here/file-name"
+}
+```
+
+Then the browser uploads the actual file directly to S3 using the `uploadUrl`.
+
+After the upload finishes, the page shows:
+
+- a success message
+- the S3 key
+
+The S3 key is important because it shows where the file was stored in the S3 bucket.
+
 The cloud page can be opened in two simple ways:
 
 1. From the main login page using the blue `Cloud Request` button.
@@ -243,7 +284,34 @@ The dashboard button is useful because providers are the main users managing pat
 
 The original `+ Add Patient` button still works the same way. The cloud button does not replace local patient creation. It adds a second cloud-based way to start a patient request.
 
-### 6. Lambda Cloud API
+### 6. S3 Upload Section On Cloud Page
+
+Changed file:
+
+```text
+app/cloud/page.tsx
+```
+
+The cloud page now includes a real S3 upload feature.
+
+This was added to the existing cloud page instead of creating a new page because it keeps the cloud demo simple. The patient request form and the S3 upload form are both in one place.
+
+The upload code is intentionally simple:
+
+1. The user enters a patient id.
+2. The user chooses a file from the browser.
+3. The frontend sends `fileName`, `patientId`, and `contentType` to API Gateway.
+4. API Gateway sends the request to Lambda.
+5. Lambda creates a pre-signed S3 upload URL.
+6. Lambda returns the `uploadUrl` and S3 `key`.
+7. The frontend uploads the real file directly to S3.
+8. The page shows a success message and the S3 key.
+
+No database changes were made for this feature.
+
+The uploaded file is not saved in Prisma. The purpose of this feature is to demonstrate S3 object storage and direct browser upload using a pre-signed URL.
+
+### 7. Lambda Cloud API
 
 Added folder:
 
@@ -272,7 +340,11 @@ POST /notes
 POST /uploads/url
 ```
 
-### 7. Cloud Project Documentation
+The existing `POST /uploads/url` route is used by the new upload section on the `/cloud` page.
+
+No Lambda change was needed for the S3 upload screen because the Lambda file already had the upload URL route.
+
+### 8. Cloud Project Documentation
 
 Added file:
 
@@ -529,7 +601,7 @@ Upload version:
 ```text
 User Browser
    |
-   | asks for upload URL
+   | chooses file and asks for upload URL
    v
 API Gateway POST /uploads/url
    |
@@ -539,6 +611,30 @@ Lambda cloud-api
    | creates temporary upload link
    v
 S3 private upload bucket
+```
+
+Full S3 upload flow:
+
+```text
+Browser chooses file
+   |
+   v
+Frontend sends file info to API Gateway /uploads/url
+   |
+   v
+API Gateway triggers Lambda
+   |
+   v
+Lambda creates pre-signed S3 upload URL
+   |
+   v
+Frontend uploads file directly to S3
+   |
+   v
+S3 stores the file
+   |
+   v
+Page shows success message and S3 key
 ```
 
 Logging version:
@@ -655,9 +751,11 @@ The Lambda route:
 POST /uploads/url
 ```
 
-creates a temporary upload URL. A frontend can use that URL to upload a file directly to S3.
+creates a temporary upload URL. The `/cloud` page uses that URL to upload a file directly to S3.
 
 This is better than putting AWS access keys inside the frontend.
+
+The S3 upload feature does not use Prisma and does not change the patient database. It only stores the selected file in S3.
 
 ### CloudWatch
 
@@ -746,6 +844,12 @@ You can also open the same cloud page by clicking `Cloud Request` on the login p
 
 The cloud page will need `NEXT_PUBLIC_CLOUD_API_URL` before it can send requests to AWS.
 
+The S3 upload section also uses the same environment variable:
+
+```env
+NEXT_PUBLIC_CLOUD_API_URL=https://your-api-gateway-url.com
+```
+
 ## How To Test The Existing Database Flow
 
 Create a patient through the original API:
@@ -801,6 +905,59 @@ The request should travel through:
 
 ```text
 /cloud page -> API Gateway -> Lambda -> /api/user -> Prisma -> SQLite
+```
+
+## How To Test The S3 Upload Feature
+
+The S3 upload feature is on the same cloud page:
+
+```text
+http://localhost:3000/cloud
+```
+
+Before testing, make sure this frontend environment variable is set:
+
+```env
+NEXT_PUBLIC_CLOUD_API_URL=https://your-api-gateway-url.com
+```
+
+Also make sure the Lambda function has:
+
+```env
+UPLOAD_BUCKET_NAME=your-s3-bucket-name
+```
+
+API Gateway needs this route:
+
+```text
+POST /uploads/url
+```
+
+The S3 bucket also needs CORS rules that allow the browser to upload with `PUT`.
+
+Simple test steps:
+
+1. Open `/cloud`.
+2. Go to the `S3 File Upload` section.
+3. Enter a patient id.
+4. Choose a file from your computer.
+5. Click `Upload File`.
+6. The page asks API Gateway and Lambda for an upload URL.
+7. The browser uploads the file directly to S3.
+8. The page shows `File uploaded to S3.`
+9. The page shows the S3 key.
+10. Open the S3 bucket in AWS and confirm the file exists.
+
+The upload flow is:
+
+```text
+Browser chooses file
+Frontend sends file info to API Gateway /uploads/url
+API Gateway triggers Lambda
+Lambda creates pre-signed S3 upload URL
+Frontend uploads file directly to S3
+S3 stores the file
+Page shows success message and S3 key
 ```
 
 ## How To Deploy The Cloud Version
@@ -999,12 +1156,15 @@ Show:
 
 - S3 bucket
 - upload route in Lambda
-- example upload URL response
+- S3 File Upload section on `/cloud`
+- file upload success message
+- S3 key shown on the page
+- uploaded file inside the S3 bucket
 
 Explain:
 
 ```text
-S3 is used for patient document upload support.
+S3 is used for patient document upload support. The browser asks Lambda for a pre-signed upload URL, then uploads the file directly to S3.
 ```
 
 ### Demo Part 7: CloudWatch
@@ -1045,9 +1205,11 @@ The minimum cloud features added are:
 - New `/cloud` page.
 - New `Cloud Request` button on the main login page.
 - New `Cloud Request` button on the provider patient dashboard.
+- Real S3 upload section on the `/cloud` page.
 - Lambda function for cloud API requests.
 - API Gateway route plan.
-- S3 upload URL support.
+- S3 pre-signed upload URL support.
+- Direct browser upload to S3.
 - CloudWatch logging through Lambda and ECS.
 - Cloud project documentation.
 
@@ -1056,7 +1218,6 @@ The minimum cloud features added are:
 These are not required for the minimum version:
 
 - DynamoDB activity logging.
-- Real file upload screen connected to S3.
 - Custom domain name.
 - HTTPS domain setup.
 - Production authentication.
