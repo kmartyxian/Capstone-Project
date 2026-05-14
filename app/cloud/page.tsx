@@ -60,11 +60,13 @@ export default function CloudPage() {
         return;
       }
 
+      const data = await response.json();
+
       setFirstName("");
       setLastName("");
       setEmail("");
       setStatus("Active");
-      setMessage("Patient request sent through AWS API Gateway and Lambda.");
+      setMessage("Patient saved to database: " + data.email);
     } catch {
       setMessage("Cloud request failed.");
     }

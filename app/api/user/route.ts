@@ -125,8 +125,8 @@ export async function POST(request: Request) {
     if (hasValue(cvv) && !/^\d{3,4}$/.test(cvv.trim())) {
       errors.push("CVV must be 3 or 4 digits.");
     }
-    if (await prisma.patient.findUnique({ where: { email } })) {
-      errors.push("");
+    if (hasValue(email) && await prisma.patient.findUnique({ where: { email: email.trim() } })) {
+      errors.push("A patient with this email already exists.");
     }
 
 // FINAL CHECK
@@ -141,7 +141,7 @@ else {
         dateOfBirth: dobDate, 
         gender,
         phoneNumber,
-        email,    
+        email: email.trim(),    
         streetAddress,
         city,
         state,
