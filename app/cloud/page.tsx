@@ -9,7 +9,6 @@ export default function CloudPage() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState("Active");
   const [message, setMessage] = useState("");
-  const [patientId, setPatientId] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [uploadMessage, setUploadMessage] = useState("");
   const [uploadKey, setUploadKey] = useState("");
@@ -67,8 +66,8 @@ export default function CloudPage() {
       return;
     }
 
-    if (!patientId.trim() || !file) {
-      setUploadMessage("Patient id and file are required.");
+    if (!file) {
+      setUploadMessage("File is required.");
       return;
     }
 
@@ -84,7 +83,6 @@ export default function CloudPage() {
         },
         body: JSON.stringify({
           fileName: file.name,
-          patientId: patientId.trim(),
           contentType: file.type || "application/octet-stream",
         }),
       });
@@ -111,7 +109,6 @@ export default function CloudPage() {
       }
 
       setFile(null);
-      setPatientId("");
       setFileInputKey(fileInputKey + 1);
       setUploadKey(data.key);
       setUploadMessage("File uploaded to S3.");
@@ -194,15 +191,6 @@ export default function CloudPage() {
           </p>
 
           <div className="mt-6 space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-slate-700">Patient id</label>
-              <input
-                value={patientId}
-                onChange={(event) => setPatientId(event.target.value)}
-                className="mt-1 w-full rounded border border-slate-300 px-3 py-2"
-              />
-            </div>
-
             {!uploadDone && (
               <div>
                 <label className="block text-sm font-medium text-slate-700">File</label>

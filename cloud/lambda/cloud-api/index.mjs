@@ -41,12 +41,12 @@ async function createUploadUrl(body) {
     return response(500, "UPLOAD_BUCKET_NAME is missing in Lambda environment variables.");
   }
 
-  if (!body.fileName || !body.patientId) {
-    return response(400, "fileName and patientId are required.");
+  if (!body.fileName) {
+    return response(400, "fileName is required.");
   }
 
   const safeFileName = body.fileName.replace(/[^a-zA-Z0-9._-]/g, "-");
-  const key = `patient-uploads/${body.patientId}/${Date.now()}-${safeFileName}`;
+  const key = `patient-uploads/general/${Date.now()}-${safeFileName}`;
 
   const command = new PutObjectCommand({
     Bucket: bucketName,

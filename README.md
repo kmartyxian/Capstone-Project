@@ -194,7 +194,6 @@ The same cloud page now also has a simple S3 file upload section.
 
 The upload section asks for:
 
-- patient id
 - file
 
 When the user clicks `Upload File`, the page sends the file information to:
@@ -208,7 +207,6 @@ The request body includes:
 ```json
 {
   "fileName": "example.pdf",
-  "patientId": "patient-id-here",
   "contentType": "application/pdf"
 }
 ```
@@ -218,7 +216,7 @@ Lambda returns:
 ```json
 {
   "uploadUrl": "temporary-s3-upload-url",
-  "key": "patient-uploads/patient-id-here/file-name"
+  "key": "patient-uploads/general/file-name"
 }
 ```
 
@@ -298,14 +296,13 @@ This was added to the existing cloud page instead of creating a new page because
 
 The upload code is intentionally simple:
 
-1. The user enters a patient id.
-2. The user chooses a file from the browser.
-3. The frontend sends `fileName`, `patientId`, and `contentType` to API Gateway.
-4. API Gateway sends the request to Lambda.
-5. Lambda creates a pre-signed S3 upload URL.
-6. Lambda returns the `uploadUrl` and S3 `key`.
-7. The frontend uploads the real file directly to S3.
-8. The page shows a success message and the S3 key.
+1. The user chooses a file from the browser.
+2. The frontend sends `fileName` and `contentType` to API Gateway.
+3. API Gateway sends the request to Lambda.
+4. Lambda creates a pre-signed S3 upload URL.
+5. Lambda returns the `uploadUrl` and S3 `key`.
+6. The frontend uploads the real file directly to S3.
+7. The page shows a success message and the S3 key.
 
 No database changes were made for this feature.
 
@@ -939,14 +936,13 @@ Simple test steps:
 
 1. Open `/cloud`.
 2. Go to the `S3 File Upload` section.
-3. Enter a patient id.
-4. Choose a file from your computer.
-5. Click `Upload File`.
-6. The page asks API Gateway and Lambda for an upload URL.
-7. The browser uploads the file directly to S3.
-8. The page shows `File uploaded to S3.`
-9. The page shows the S3 key.
-10. Open the S3 bucket in AWS and confirm the file exists.
+3. Choose a file from your computer.
+4. Click `Upload File`.
+5. The page asks API Gateway and Lambda for an upload URL.
+6. The browser uploads the file directly to S3.
+7. The page shows `File uploaded to S3.`
+8. The page shows the S3 key.
+9. Open the S3 bucket in AWS and confirm the file exists.
 
 The upload flow is:
 
