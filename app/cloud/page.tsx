@@ -18,8 +18,32 @@ export default function CloudPage() {
   const cloudApiUrl = process.env.NEXT_PUBLIC_CLOUD_API_URL || "";
   const [apiUrl, setApiUrl] = useState(cloudApiUrl);
 
+  function getApiUrl() {
+    let url = apiUrl.trim();
+
+    if (url.includes("amplifyapp.com") && cloudApiUrl) {
+      return cloudApiUrl;
+    }
+
+    if (url.endsWith("/cloud")) {
+      url = url.slice(0, -6);
+    }
+
+    if (url.endsWith("/patients")) {
+      url = url.slice(0, -9);
+    }
+
+    if (url.endsWith("/uploads/url")) {
+      url = url.slice(0, -12);
+    }
+
+    return url;
+  }
+
   async function handleSubmit() {
-    if (!apiUrl.trim()) {
+    const finalApiUrl = getApiUrl();
+
+    if (!finalApiUrl) {
       setMessage("Add NEXT_PUBLIC_CLOUD_API_URL to use the AWS API Gateway endpoint.");
       return;
     }
@@ -32,7 +56,7 @@ export default function CloudPage() {
     setMessage("Sending request to AWS API Gateway...");
 
     try {
-      const response = await fetch(`${apiUrl.trim()}/patients`, {
+      const response = await fetch(`${finalApiUrl}/patients`, {
         method: "POST",
         headers: {
           "Content-Type": "text/plain",
@@ -66,7 +90,9 @@ export default function CloudPage() {
   }
 
   async function handleUpload() {
-    if (!apiUrl.trim()) {
+    const finalApiUrl = getApiUrl();
+
+    if (!finalApiUrl) {
       setUploadMessage("Add NEXT_PUBLIC_CLOUD_API_URL to use the AWS API Gateway endpoint.");
       return;
     }
@@ -81,7 +107,7 @@ export default function CloudPage() {
     setUploadDone(false);
 
     try {
-      const response = await fetch(`${apiUrl.trim()}/uploads/url`, {
+      const response = await fetch(`${finalApiUrl}/uploads/url`, {
         method: "POST",
         headers: {
           "Content-Type": "text/plain",
@@ -149,7 +175,7 @@ export default function CloudPage() {
             className="mt-1 w-full rounded border border-slate-300 px-3 py-2"
           />
           <p className="mt-1 text-sm text-slate-600">
-            This uses NEXT_PUBLIC_CLOUD_API_URL when it is saved in the environment file.
+            Use the API Gateway URL, not the Amplify page URL.
           </p>
         </div>
 
