@@ -190,7 +190,60 @@ Add NEXT_PUBLIC_CLOUD_API_URL to use the AWS API Gateway endpoint.
 
 This makes the page safe to open locally even before AWS is fully set up.
 
-### 4. Lambda Cloud API
+The cloud page can be opened in two simple ways:
+
+1. From the main login page using the blue `Cloud Request` button.
+2. From the provider patient dashboard using the `Cloud Request` button next to `+ Add Patient`.
+
+This makes the cloud feature easy to find during a class demo. A user does not need to manually type `/cloud` in the browser if they do not want to.
+
+### 4. Cloud Request Button On Login Page
+
+Changed file:
+
+```text
+app/page.tsx
+```
+
+The main login page now includes a blue `Cloud Request` button near the bottom of the page.
+
+This button links to:
+
+```text
+/cloud
+```
+
+This was added so the cloud feature is visible immediately when the app opens. Before this change, the cloud page existed, but a user had to know the `/cloud` URL or open it manually.
+
+The login page still keeps the original provider login, patient login, provider register, and patient register sections. The new cloud button only adds navigation to the cloud request page.
+
+### 5. Cloud Request Button On Provider Dashboard
+
+Changed file:
+
+```text
+app/patients/page.tsx
+```
+
+The provider patient dashboard now includes a `Cloud Request` button beside the existing `+ Add Patient` button.
+
+This button links to:
+
+```text
+/cloud
+```
+
+The dashboard button is useful because providers are the main users managing patient requests. During a demo, the flow can be:
+
+1. Log in as a provider.
+2. Open the patient dashboard.
+3. Click `Cloud Request`.
+4. Submit a patient request through the cloud page.
+5. Return to the patient dashboard and show the patient record.
+
+The original `+ Add Patient` button still works the same way. The cloud button does not replace local patient creation. It adds a second cloud-based way to start a patient request.
+
+### 6. Lambda Cloud API
 
 Added folder:
 
@@ -219,7 +272,7 @@ POST /notes
 POST /uploads/url
 ```
 
-### 5. Cloud Project Documentation
+### 7. Cloud Project Documentation
 
 Added file:
 
@@ -350,6 +403,9 @@ The cloud branch adds a second way to create a patient request.
 The new cloud flow is:
 
 ```text
+Cloud Request button
+   |
+   v
 /cloud page
    |
    v
@@ -686,6 +742,8 @@ Open the cloud test page:
 http://localhost:3000/cloud
 ```
 
+You can also open the same cloud page by clicking `Cloud Request` on the login page or on the provider patient dashboard.
+
 The cloud page will need `NEXT_PUBLIC_CLOUD_API_URL` before it can send requests to AWS.
 
 ## How To Test The Existing Database Flow
@@ -715,6 +773,12 @@ Before AWS is connected, open:
 
 ```text
 http://localhost:3000/cloud
+```
+
+Or click:
+
+```text
+Cloud Request
 ```
 
 Try to submit the form.
@@ -841,6 +905,8 @@ Open:
 /cloud
 ```
 
+You can get there by clicking the `Cloud Request` button on the login page or the provider dashboard.
+
 Submit a patient request.
 
 ## What To Demo In Class
@@ -909,6 +975,8 @@ Open:
 /cloud
 ```
 
+The easiest way to open it during the demo is to click the blue `Cloud Request` button on the main login page. If you are already logged in as a provider, you can also click `Cloud Request` on the patient dashboard beside `+ Add Patient`.
+
 Submit a new patient.
 
 Then open:
@@ -975,6 +1043,8 @@ The minimum cloud features added are:
 
 - Docker container setup for ECS.
 - New `/cloud` page.
+- New `Cloud Request` button on the main login page.
+- New `Cloud Request` button on the provider patient dashboard.
 - Lambda function for cloud API requests.
 - API Gateway route plan.
 - S3 upload URL support.
