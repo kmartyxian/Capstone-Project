@@ -15,7 +15,7 @@ export default function CloudPage() {
   const [fileInputKey, setFileInputKey] = useState(0);
   const [uploadDone, setUploadDone] = useState(false);
 
-  const cloudApiUrl = process.env.NEXT_PUBLIC_CLOUD_API_URL || "";
+  const cloudApiUrl = process.env.NEXT_PUBLIC_CLOUD_API_URL || "https://sre9yupha8.execute-api.us-east-2.amazonaws.com";
   const [apiUrl, setApiUrl] = useState(cloudApiUrl);
 
   function getApiUrl() {
