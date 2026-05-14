@@ -19,11 +19,11 @@ export async function POST(request: NextRequest) {
     let existingRecord = null;
     if (role === "provider") {
       existingRecord = await prisma.provider.findFirst({
-        where: { OR: [{ name: email }, { username }] },
+        where: { name: email },
       });
     } else {
       existingRecord = await prisma.patient.findFirst({
-        where: { OR: [{ email }, { username }] },
+        where: { email },
       });
     }
 
@@ -35,7 +35,6 @@ export async function POST(request: NextRequest) {
       await prisma.provider.create({
         data: {
           name: email,
-          username,
           location: "Default",
         },
       });
@@ -43,7 +42,6 @@ export async function POST(request: NextRequest) {
       await prisma.patient.create({
         data: {
           email,
-          username,
           // Other fields set to null
         },
       });
