@@ -5,6 +5,7 @@ frontend:
       commands:
         - npm ci
         - export DATABASE_URL=${DATABASE_URL:-file:./dev.db}
+        - rm -f prisma/dev.db
         - npx prisma db push
         - npx prisma generate
     build:
