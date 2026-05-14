@@ -35,7 +35,7 @@ export default function CloudPage() {
       const response = await fetch(`${apiUrl.trim()}/patients`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "text/plain",
         },
         body: JSON.stringify({
           firstName: firstName.trim(),
@@ -80,7 +80,7 @@ export default function CloudPage() {
       const response = await fetch(`${apiUrl.trim()}/uploads/url`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "text/plain",
         },
         body: JSON.stringify({
           fileName: file.name,
