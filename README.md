@@ -4,13 +4,1027 @@
 **Course:** CIDS 484  
 **Semester:** Spring 2026  
 **Repository:** https://github.com/kmartyxian/Capstone-Project  
-**Branch:** `main`
+**Branch:** `CloudImplementation`
 
 ## Project Description
 
 The Medical Tourism Platform is a full-stack web application for managing the patient side and provider side of a medical tourism workflow. It stores patient intake information, medical history, emergency contacts, insurance details, appointment preferences, travel details, notes, and patient status.
 
 The final version combines the work from the milestone branches into one main branch. The app includes patient intake, a provider-facing patient management dashboard, patient and provider login flows, patient profile editing, and notes connected to patient records.
+
+## Cloud Implementation Branch
+
+This branch adds a simple cloud computing version of the Medical Tourism Platform for the Cloud Computing Project. The goal of this branch is not to rebuild the capstone project. The goal is to keep the original capstone project working the same way and add a small AWS cloud layer around it.
+
+The cloud version uses the existing capstone project as the base. The same Next.js app, React pages, Prisma setup, SQLite database, patient API routes, notes API routes, and dashboard flow are still used. The added cloud files show how the project can be deployed to AWS and how cloud services can send requests into the existing app.
+
+### Main Cloud Project Goal
+
+The main goal is to turn the existing medical tourism capstone project into a simple cloud-based medical tourism management platform.
+
+The cloud version demonstrates:
+
+- Running the existing Next.js application in a container.
+- Deploying the application with Amazon ECS.
+- Creating cloud API routes with API Gateway.
+- Running simple backend cloud logic with AWS Lambda.
+- Using S3 for patient file upload support.
+- Using CloudWatch logs to monitor cloud requests.
+- Keeping the current Prisma and SQLite database integration instead of replacing it.
+
+This branch is designed to satisfy the cloud project requirement while keeping the code simple enough to explain in a class presentation.
+
+### Important Cloud Rule
+
+The database was not replaced.
+
+The original database setup is still:
+
+```env
+DATABASE_URL="file:./dev.db"
+```
+
+The database schema is still in:
+
+```text
+prisma/schema.prisma
+```
+
+The Prisma client setup is still in:
+
+```text
+lib/prisma.ts
+```
+
+The SQLite database file is expected locally at:
+
+```text
+prisma/dev.db
+```
+
+That database file is ignored by Git, so it is not pushed to GitHub. This is normal for SQLite development databases.
+
+The cloud layer connects to the existing app APIs. Those existing app APIs continue to use Prisma. This means the cloud features are added around the current database setup instead of replacing it with DynamoDB or another database.
+
+### AWS Services Used
+
+This cloud project uses these AWS services:
+
+1. API Gateway
+2. Lambda
+3. ECS
+4. S3
+5. CloudWatch
+
+Only the first four are needed to satisfy the main cloud service requirement. CloudWatch is also included because Lambda and ECS automatically create logs there, and those logs are useful for the final demo.
+
+### Why DynamoDB Was Not Added
+
+DynamoDB was not added because the project already has a working database integration with Prisma and SQLite.
+
+Adding DynamoDB as the main database would require redesigning the project and replacing the current database logic. That would go against the goal of this branch, which is to add cloud computing features without rebuilding the capstone project.
+
+If DynamoDB is required by the instructor later, it should only be used for a tiny separate feature, such as a simple activity log. It should not store the main patient records, notes, provider records, or profile data.
+
+Example optional DynamoDB use:
+
+```text
+ActivityLog table
+- id
+- action
+- message
+- createdAt
+```
+
+That would allow the project to mention DynamoDB without replacing the real app database.
+
+## What Was Added In This Branch
+
+### 1. Dockerfile
+
+Added file:
+
+```text
+Dockerfile
+```
+
+The Dockerfile is used to package the existing Next.js app into a container so it can run on ECS.
+
+The Dockerfile does these steps:
+
+1. Starts from the Node 20 Alpine image.
+2. Sets the working folder to `/app`.
+3. Copies `package.json` and `package-lock.json`.
+4. Installs dependencies with `npm install`.
+5. Copies the rest of the project files.
+6. Runs `npx prisma generate`.
+7. Builds the Next.js app with `npm run build`.
+8. Exposes port `3000`.
+9. Starts the app with `npm start`.
+
+This does not change the app code. It only adds a way to run the same app inside a container.
+
+### 2. .dockerignore
+
+Added file:
+
+```text
+.dockerignore
+```
+
+This file tells Docker which files should not be copied into the container image.
+
+It ignores:
+
+- `node_modules`
+- `.next`
+- `.git`
+- local database files
+- `.env`
+- README files
+
+This keeps the Docker image cleaner and avoids copying local development files into the image.
+
+### 3. Cloud Test Page
+
+Added file:
+
+```text
+app/cloud/page.tsx
+```
+
+This adds a new page at:
+
+```text
+http://localhost:3000/cloud
+```
+
+The cloud page is a simple form that lets a user submit a patient request through the cloud API.
+
+The page asks for:
+
+- first name
+- last name
+- email
+- status
+
+When the user clicks `Send Cloud Request`, the page sends a request to the API Gateway URL stored in:
+
+```env
+NEXT_PUBLIC_CLOUD_API_URL
+```
+
+The frontend request goes to:
+
+```text
+POST {NEXT_PUBLIC_CLOUD_API_URL}/patients
+```
+
+This page does not save directly to Prisma. It sends the request to AWS API Gateway first. API Gateway sends the request to Lambda. Lambda forwards it to the existing app API.
+
+If `NEXT_PUBLIC_CLOUD_API_URL` is not set, the page shows this message:
+
+```text
+Add NEXT_PUBLIC_CLOUD_API_URL to use the AWS API Gateway endpoint.
+```
+
+This makes the page safe to open locally even before AWS is fully set up.
+
+### 4. Lambda Cloud API
+
+Added folder:
+
+```text
+cloud/lambda/cloud-api
+```
+
+Important files:
+
+```text
+cloud/lambda/cloud-api/index.mjs
+cloud/lambda/cloud-api/package.json
+cloud/lambda/cloud-api/README.md
+```
+
+The Lambda function is the small cloud backend for this project.
+
+It receives requests from API Gateway and then forwards them to the existing Next.js API routes. This keeps the original app logic in one place.
+
+The Lambda function supports these cloud routes:
+
+```text
+POST /patients
+PATCH /patients/status
+POST /notes
+POST /uploads/url
+```
+
+### 5. Cloud Project Documentation
+
+Added file:
+
+```text
+docs/cloud-computing-project.md
+```
+
+This file contains the longer cloud project plan.
+
+It includes:
+
+- project idea
+- AWS services used
+- architecture diagram description
+- step-by-step setup roadmap
+- presentation demo plan
+- initial presentation outline
+- final presentation outline
+- final report outline
+- resume bullet points
+- portfolio description
+- optional features
+- what to prioritize first
+
+This file is meant to help explain the project for class and portfolio use.
+
+## One Existing File That Was Changed
+
+Changed file:
+
+```text
+app/api/register/route.ts
+```
+
+This file had references to a `username` field when checking and creating providers and patients.
+
+The current Prisma schema does not include a `username` field on `Provider` or `Patient`.
+
+The schema currently has:
+
+```text
+Provider
+- id
+- name
+- email
+- location
+- createdAt
+
+Patient
+- id
+- firstName
+- lastName
+- email
+- many patient intake fields
+- notesList
+```
+
+Because `username` does not exist in the Prisma schema, the production build failed. This matters for ECS because ECS needs the app to build successfully before it can run in a container.
+
+The change was small:
+
+- provider registration now checks `Provider.name`
+- patient registration now checks `Patient.email`
+- the route no longer tries to save `username` into the database
+
+This was not a database redesign. It was a small compatibility fix so the existing code matches the existing Prisma schema.
+
+## How The Cloud Version Works With The Existing Capstone Project
+
+The original capstone app already has working patient management features.
+
+Important existing app routes:
+
+```text
+app/api/user/route.ts
+app/api/notes/route.ts
+app/api/auth/provider/route.ts
+app/api/auth/patient/route.ts
+```
+
+The cloud branch does not replace these routes. It uses them.
+
+### Existing Patient Flow
+
+The original app can already create a patient through:
+
+```text
+POST /api/user
+```
+
+That route uses Prisma:
+
+```text
+lib/prisma.ts
+```
+
+Prisma writes the patient into the SQLite database:
+
+```text
+prisma/dev.db
+```
+
+The provider dashboard reads patients from:
+
+```text
+GET /api/user
+```
+
+This means the normal capstone flow is:
+
+```text
+Provider Dashboard
+   |
+   v
+/api/user
+   |
+   v
+Prisma
+   |
+   v
+SQLite database
+```
+
+### New Cloud Patient Flow
+
+The cloud branch adds a second way to create a patient request.
+
+The new cloud flow is:
+
+```text
+/cloud page
+   |
+   v
+API Gateway POST /patients
+   |
+   v
+Lambda cloud-api function
+   |
+   v
+Existing Next.js POST /api/user route
+   |
+   v
+Prisma
+   |
+   v
+SQLite database
+```
+
+This proves the app can receive cloud-based API requests while still using the same existing backend and database.
+
+### Existing Notes Flow
+
+The original app can already create a note through:
+
+```text
+POST /api/notes
+```
+
+The note is connected to a patient by `patientId`.
+
+The existing notes flow is:
+
+```text
+Patient profile page
+   |
+   v
+/api/notes
+   |
+   v
+Prisma Note model
+   |
+   v
+SQLite database
+```
+
+### New Cloud Notes Flow
+
+The Lambda function also supports:
+
+```text
+POST /notes
+```
+
+The cloud notes flow is:
+
+```text
+API Gateway POST /notes
+   |
+   v
+Lambda cloud-api function
+   |
+   v
+Existing Next.js POST /api/notes route
+   |
+   v
+Prisma
+   |
+   v
+SQLite database
+```
+
+This means notes still use the existing `Note` model and existing database relationship.
+
+## Full Cloud Architecture
+
+Simple text version:
+
+```text
+User Browser
+   |
+   | opens deployed app
+   v
+Amazon ECS
+   |
+   | runs Docker container
+   v
+Next.js Medical Tourism Platform
+   |
+   | uses existing API routes
+   v
+Prisma
+   |
+   v
+SQLite database
+```
+
+Cloud API version:
+
+```text
+User Browser
+   |
+   | submits from /cloud page
+   v
+API Gateway
+   |
+   | sends request to Lambda
+   v
+Lambda cloud-api
+   |
+   | forwards request to deployed Next.js app
+   v
+Existing Next.js API routes
+   |
+   | use Prisma
+   v
+SQLite database
+```
+
+Upload version:
+
+```text
+User Browser
+   |
+   | asks for upload URL
+   v
+API Gateway POST /uploads/url
+   |
+   v
+Lambda cloud-api
+   |
+   | creates temporary upload link
+   v
+S3 private upload bucket
+```
+
+Logging version:
+
+```text
+Lambda
+   |
+   v
+CloudWatch Logs
+
+ECS container
+   |
+   v
+CloudWatch Logs
+```
+
+## Explanation Of Each AWS Service
+
+### API Gateway
+
+API Gateway is the public cloud API entrance.
+
+Instead of only calling the app's local API routes directly, the cloud page can call an AWS URL.
+
+Example:
+
+```text
+https://your-api-gateway-url.com/patients
+```
+
+API Gateway receives the HTTP request and sends it to Lambda.
+
+For this project, API Gateway demonstrates:
+
+- cloud-hosted API endpoints
+- request routing
+- CORS support for browser requests
+- separating the frontend from the cloud backend entry point
+
+### Lambda
+
+Lambda runs backend code without managing a server.
+
+In this project, Lambda is intentionally simple.
+
+It does not replace the Next.js app. It works like a cloud middle layer.
+
+Lambda does these jobs:
+
+- receives patient requests from API Gateway
+- receives note requests from API Gateway
+- forwards those requests to the existing Next.js API routes
+- creates S3 upload URLs
+- logs requests for CloudWatch
+
+The Lambda function uses this environment variable:
+
+```env
+APP_API_URL=https://your-ecs-app-url.com
+```
+
+That value tells Lambda where the deployed Next.js app is running.
+
+For example, when Lambda receives:
+
+```text
+POST /patients
+```
+
+It forwards the data to:
+
+```text
+{APP_API_URL}/api/user
+```
+
+### ECS
+
+ECS runs the existing capstone project as a container.
+
+The app already runs locally with:
+
+```bash
+npm run dev
+```
+
+For AWS deployment, the app needs to run in a container. The Dockerfile creates that container.
+
+ECS uses the Docker image to run the app in AWS.
+
+For this project, ECS demonstrates:
+
+- container deployment
+- running a web application in the cloud
+- exposing the Next.js app on port `3000`
+- using environment variables in a cloud container
+
+### S3
+
+S3 is used for patient file upload support.
+
+The project does not need a complicated file system. S3 is a simple AWS service for storing files.
+
+Possible patient files:
+
+- passport scan
+- medical form
+- insurance document
+- travel document
+- appointment document
+
+The Lambda route:
+
+```text
+POST /uploads/url
+```
+
+creates a temporary upload URL. A frontend can use that URL to upload a file directly to S3.
+
+This is better than putting AWS access keys inside the frontend.
+
+### CloudWatch
+
+CloudWatch stores logs from AWS services.
+
+The Lambda function includes:
+
+```text
+console.log("Cloud API request", method, path);
+```
+
+Those logs appear in CloudWatch.
+
+ECS can also send app logs to CloudWatch.
+
+For the final demo, CloudWatch is useful because it proves the cloud services are actually receiving requests.
+
+## Environment Variables
+
+### Local App Environment
+
+The normal local database variable is:
+
+```env
+DATABASE_URL="file:./dev.db"
+```
+
+This tells Prisma to use the SQLite database file.
+
+### Frontend Cloud Environment
+
+The cloud page uses:
+
+```env
+NEXT_PUBLIC_CLOUD_API_URL=https://your-api-gateway-url.com
+```
+
+This tells the browser where the API Gateway endpoint is.
+
+If this is missing, the `/cloud` page still opens, but it will not send the cloud request.
+
+### Lambda Environment
+
+The Lambda function uses:
+
+```env
+APP_API_URL=https://your-ecs-app-url.com
+UPLOAD_BUCKET_NAME=your-s3-bucket-name
+```
+
+`APP_API_URL` points to the deployed Next.js app.
+
+`UPLOAD_BUCKET_NAME` points to the private S3 bucket used for uploads.
+
+## How To Run Locally
+
+Use the same steps as the original capstone project.
+
+```bash
+npm install
+npx prisma db push
+npm run dev
+```
+
+On Windows PowerShell, use:
+
+```bash
+npm.cmd install
+npx.cmd prisma db push
+npm.cmd run dev
+```
+
+Open:
+
+```text
+http://localhost:3000
+```
+
+Open the cloud test page:
+
+```text
+http://localhost:3000/cloud
+```
+
+The cloud page will need `NEXT_PUBLIC_CLOUD_API_URL` before it can send requests to AWS.
+
+## How To Test The Existing Database Flow
+
+Create a patient through the original API:
+
+```powershell
+Invoke-WebRequest -Uri http://localhost:3000/api/user `
+  -Method POST `
+  -ContentType "application/json" `
+  -Body '{"firstName":"Cloud","lastName":"Test","email":"cloudtest@example.com","status":"Active"}'
+```
+
+Then open:
+
+```text
+http://localhost:3000/patients
+```
+
+The patient should appear in the dashboard if provider login is set up.
+
+This proves the original API still works.
+
+## How To Test The Cloud Page Locally
+
+Before AWS is connected, open:
+
+```text
+http://localhost:3000/cloud
+```
+
+Try to submit the form.
+
+If no API Gateway URL is configured, the page will show:
+
+```text
+Add NEXT_PUBLIC_CLOUD_API_URL to use the AWS API Gateway endpoint.
+```
+
+After API Gateway is created, add this to the environment:
+
+```env
+NEXT_PUBLIC_CLOUD_API_URL=https://your-api-gateway-url.com
+```
+
+Then restart the app and submit the form again.
+
+The request should travel through:
+
+```text
+/cloud page -> API Gateway -> Lambda -> /api/user -> Prisma -> SQLite
+```
+
+## How To Deploy The Cloud Version
+
+### Step 1: Build The Docker Image
+
+```bash
+docker build -t medical-tourism-platform .
+```
+
+### Step 2: Run The Docker Image Locally
+
+```bash
+docker run -p 3000:3000 --env-file .env medical-tourism-platform
+```
+
+Open:
+
+```text
+http://localhost:3000
+```
+
+### Step 3: Push The Image To Amazon ECR
+
+In AWS:
+
+1. Create an ECR repository.
+2. Follow the push commands shown by ECR.
+3. Confirm the image appears in ECR.
+
+### Step 4: Deploy To ECS
+
+Use the simplest ECS setup:
+
+1. Create an ECS cluster.
+2. Use Fargate.
+3. Create a task definition.
+4. Use the ECR image.
+5. Set container port `3000`.
+6. Add `DATABASE_URL` as an environment variable.
+7. Start one ECS service.
+
+For a class demo, one running task is enough.
+
+### Step 5: Create The S3 Bucket
+
+Create a private S3 bucket for patient uploads.
+
+Example name:
+
+```text
+medical-tourism-patient-uploads
+```
+
+### Step 6: Create The Lambda Function
+
+Use the code from:
+
+```text
+cloud/lambda/cloud-api
+```
+
+Set Lambda environment variables:
+
+```env
+APP_API_URL=https://your-ecs-app-url.com
+UPLOAD_BUCKET_NAME=medical-tourism-patient-uploads
+```
+
+Give Lambda permission to put objects in the S3 bucket.
+
+### Step 7: Create API Gateway
+
+Create an HTTP API Gateway.
+
+Connect it to the Lambda function.
+
+Add routes:
+
+```text
+POST /patients
+PATCH /patients/status
+POST /notes
+POST /uploads/url
+```
+
+Enable CORS so the browser can call it.
+
+### Step 8: Connect The App To API Gateway
+
+Set this environment variable in the app:
+
+```env
+NEXT_PUBLIC_CLOUD_API_URL=https://your-api-gateway-url.com
+```
+
+Restart the app.
+
+Open:
+
+```text
+/cloud
+```
+
+Submit a patient request.
+
+## What To Demo In Class
+
+### Demo Part 1: Existing Capstone App
+
+Show that the original project still works:
+
+- login page
+- provider login
+- patient dashboard
+- add patient
+- edit patient
+- notes
+- Prisma database still being used
+
+### Demo Part 2: ECS
+
+Show:
+
+- Dockerfile
+- ECR image
+- ECS service running
+- deployed app URL
+
+Explain:
+
+```text
+ECS runs the same capstone project in a cloud container.
+```
+
+### Demo Part 3: API Gateway
+
+Show:
+
+- API Gateway routes
+- `POST /patients`
+- `POST /notes`
+- `POST /uploads/url`
+
+Explain:
+
+```text
+API Gateway gives the project public cloud API endpoints.
+```
+
+### Demo Part 4: Lambda
+
+Show:
+
+- Lambda code in `cloud/lambda/cloud-api/index.mjs`
+- Lambda environment variables
+- Lambda test event
+
+Explain:
+
+```text
+Lambda receives cloud API requests and forwards them to the existing Next.js API routes.
+```
+
+### Demo Part 5: Cloud Page
+
+Open:
+
+```text
+/cloud
+```
+
+Submit a new patient.
+
+Then open:
+
+```text
+/patients
+```
+
+Show that the patient appears in the existing dashboard.
+
+Explain:
+
+```text
+The patient was sent through AWS first, but it still ended up in the same Prisma database.
+```
+
+### Demo Part 6: S3
+
+Show:
+
+- S3 bucket
+- upload route in Lambda
+- example upload URL response
+
+Explain:
+
+```text
+S3 is used for patient document upload support.
+```
+
+### Demo Part 7: CloudWatch
+
+Show:
+
+- Lambda logs
+- ECS logs
+
+Explain:
+
+```text
+CloudWatch shows that the cloud services received and processed the requests.
+```
+
+## What This Project Proves
+
+This project proves that the original capstone project can be extended with cloud computing features without being rebuilt.
+
+It demonstrates:
+
+- how to containerize a Next.js app
+- how to deploy a web app to ECS
+- how to create cloud API routes with API Gateway
+- how to run backend logic in Lambda
+- how to connect Lambda to an existing application backend
+- how to use S3 for file storage
+- how to use CloudWatch for logs
+- how to keep an existing Prisma database integration
+
+The project is intentionally simple. That makes it easier to explain and easier to demo. It still shows real cloud computing concepts because it uses managed AWS services and connects them to a working full-stack application.
+
+## Minimum Completed Cloud Features
+
+The minimum cloud features added are:
+
+- Docker container setup for ECS.
+- New `/cloud` page.
+- Lambda function for cloud API requests.
+- API Gateway route plan.
+- S3 upload URL support.
+- CloudWatch logging through Lambda and ECS.
+- Cloud project documentation.
+
+## Optional Future Cloud Improvements
+
+These are not required for the minimum version:
+
+- DynamoDB activity logging.
+- Real file upload screen connected to S3.
+- Custom domain name.
+- HTTPS domain setup.
+- Production authentication.
+- RDS or managed production database.
+- CI/CD deployment pipeline.
+- More detailed monitoring dashboards.
+
+## Simple Explanation For Presentation
+
+A simple way to explain this project:
+
+```text
+My original capstone project was a medical tourism platform using Next.js, React, Prisma, and SQLite.
+
+For the cloud project, I did not rebuild it. I added AWS cloud services around it.
+
+ECS runs the existing app in a container.
+API Gateway gives the app cloud API endpoints.
+Lambda handles simple cloud backend requests.
+S3 stores patient upload files.
+CloudWatch shows logs from the cloud services.
+
+The patient data still goes through my original Next.js API routes and Prisma database setup.
+This shows cloud deployment and cloud integration while keeping my original capstone project structure.
+```
+
+## Resume Bullet Points
+
+- Added an AWS cloud layer to a medical tourism management platform using API Gateway, Lambda, ECS, S3, and CloudWatch.
+- Containerized a Next.js, React, Prisma, and SQLite application for deployment on Amazon ECS.
+- Built a simple AWS Lambda function that forwards cloud API requests to existing Next.js API routes.
+- Preserved the original Prisma database integration while adding cloud-based request handling.
+- Added S3 upload URL support for patient document storage.
+- Documented the cloud architecture, deployment plan, demo steps, and portfolio explanation.
+
+## Portfolio Description
+
+This project extends a full-stack medical tourism capstone application with a simple AWS cloud architecture. The original application manages patients, providers, patient profiles, travel information, medical information, and notes using Next.js, React, Prisma, and SQLite. The cloud branch adds ECS container deployment, API Gateway routes, a Lambda cloud API layer, S3 upload support, and CloudWatch logging. The design keeps the existing database and backend logic while showing how a working web application can be deployed and connected to cloud services.
 
 ## Milestone README Sections
 
