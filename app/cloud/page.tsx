@@ -105,7 +105,7 @@ export default function CloudPage() {
       });
 
       if (!uploadResponse.ok) {
-        setUploadMessage("File upload failed.");
+        setUploadMessage("File upload failed. Status: " + uploadResponse.status);
         return;
       }
 
