@@ -16,9 +16,10 @@ export default function CloudPage() {
   const [uploadDone, setUploadDone] = useState(false);
 
   const cloudApiUrl = process.env.NEXT_PUBLIC_CLOUD_API_URL || "";
+  const [apiUrl, setApiUrl] = useState(cloudApiUrl);
 
   async function handleSubmit() {
-    if (!cloudApiUrl) {
+    if (!apiUrl.trim()) {
       setMessage("Add NEXT_PUBLIC_CLOUD_API_URL to use the AWS API Gateway endpoint.");
       return;
     }
@@ -31,7 +32,7 @@ export default function CloudPage() {
     setMessage("Sending request to AWS API Gateway...");
 
     try {
-      const response = await fetch(`${cloudApiUrl}/patients`, {
+      const response = await fetch(`${apiUrl.trim()}/patients`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -61,7 +62,7 @@ export default function CloudPage() {
   }
 
   async function handleUpload() {
-    if (!cloudApiUrl) {
+    if (!apiUrl.trim()) {
       setUploadMessage("Add NEXT_PUBLIC_CLOUD_API_URL to use the AWS API Gateway endpoint.");
       return;
     }
@@ -76,7 +77,7 @@ export default function CloudPage() {
     setUploadDone(false);
 
     try {
-      const response = await fetch(`${cloudApiUrl}/uploads/url`, {
+      const response = await fetch(`${apiUrl.trim()}/uploads/url`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -130,6 +131,19 @@ export default function CloudPage() {
           This page sends a new patient request to AWS API Gateway. Lambda then forwards it to the
           same patient API already used by the capstone project.
         </p>
+
+        <div className="mt-6">
+          <label className="block text-sm font-medium text-slate-700">AWS API Gateway URL</label>
+          <input
+            value={apiUrl}
+            onChange={(event) => setApiUrl(event.target.value)}
+            placeholder="https://your-api-gateway-url.com"
+            className="mt-1 w-full rounded border border-slate-300 px-3 py-2"
+          />
+          <p className="mt-1 text-sm text-slate-600">
+            This uses NEXT_PUBLIC_CLOUD_API_URL when it is saved in the environment file.
+          </p>
+        </div>
 
         <div className="mt-6 space-y-4">
           <div>

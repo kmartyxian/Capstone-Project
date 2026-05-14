@@ -180,6 +180,15 @@ The frontend request goes to:
 POST {NEXT_PUBLIC_CLOUD_API_URL}/patients
 ```
 
+The page also has an `AWS API Gateway URL` input. This was added because `.env.local` is ignored by Git and may be missing on a local computer.
+
+If `NEXT_PUBLIC_CLOUD_API_URL` exists in `.env.local`, the input is filled automatically.
+
+If `.env.local` is missing, paste the API Gateway URL into the input on the page before clicking:
+
+- `Send Cloud Request`
+- `Upload File`
+
 This page does not save directly to Prisma. It sends the request to AWS API Gateway first. API Gateway sends the request to Lambda. Lambda forwards it to the existing app API.
 
 If `NEXT_PUBLIC_CLOUD_API_URL` is not set, the page shows this message:
@@ -792,7 +801,22 @@ NEXT_PUBLIC_CLOUD_API_URL=https://your-api-gateway-url.com
 
 This tells the browser where the API Gateway endpoint is.
 
-If this is missing, the `/cloud` page still opens, but it will not send the cloud request.
+If this is missing, the `/cloud` page still opens. You can paste the API Gateway URL into the `AWS API Gateway URL` input on the page.
+
+The project includes this example file:
+
+```text
+.env.local.example
+```
+
+To use it locally, create your own `.env.local` file with:
+
+```env
+DATABASE_URL="file:./dev.db"
+NEXT_PUBLIC_CLOUD_API_URL="https://your-api-gateway-url.com"
+```
+
+After changing `.env.local`, restart the dev server. Next.js only loads environment variables when the server starts.
 
 ### Lambda Environment
 
@@ -847,6 +871,8 @@ The S3 upload section also uses the same environment variable:
 NEXT_PUBLIC_CLOUD_API_URL=https://your-api-gateway-url.com
 ```
 
+If the variable is not saved locally, paste the API Gateway URL into the `AWS API Gateway URL` input on the `/cloud` page.
+
 ## How To Test The Existing Database Flow
 
 Create a patient through the original API:
@@ -884,7 +910,7 @@ Cloud Request
 
 Try to submit the form.
 
-If no API Gateway URL is configured, the page will show:
+If no API Gateway URL is configured and the input is empty, the page will show:
 
 ```text
 Add NEXT_PUBLIC_CLOUD_API_URL to use the AWS API Gateway endpoint.
@@ -897,6 +923,8 @@ NEXT_PUBLIC_CLOUD_API_URL=https://your-api-gateway-url.com
 ```
 
 Then restart the app and submit the form again.
+
+You can also paste the same API Gateway URL directly into the `AWS API Gateway URL` input on the `/cloud` page.
 
 The request should travel through:
 
@@ -917,6 +945,8 @@ Before testing, make sure this frontend environment variable is set:
 ```env
 NEXT_PUBLIC_CLOUD_API_URL=https://your-api-gateway-url.com
 ```
+
+Or paste the same URL into the `AWS API Gateway URL` input on the cloud page.
 
 Also make sure the Lambda function has:
 
